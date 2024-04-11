@@ -33,8 +33,6 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<Food>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<RawMaterial>().HasIndex(x => x.Name).IsUnique();
-            modelBuilder.Entity<Stock>().HasIndex(x => x.Name).IsUnique();
-            modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Unit>().HasIndex(x => x.Name).IsUnique();
             DisableCascadingDelete(modelBuilder);
         }
