@@ -17,6 +17,7 @@ namespace Restromanager.Backend.Data
         public DbSet<FoodRawMaterial> FoodRawMaterials { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductFood> ProductFoods { get; set; }
         public DbSet<Stock> Stock { get; set; }
 
         public DbSet<Unit> Units { get; set; }

@@ -11,9 +11,9 @@ namespace Restromanager.Backend.Domain.Entities
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string Name { get; set; } = null!;
 
-        public ICollection<Food>? Foods { get; set; }
+        public ICollection<ProductFood>? ProductFoods { get; set; }
         [Display(Name = "Alimentos")]
-        public int FoodsNumber => Foods == null ? 0 : Foods.Count;
+        public int ProductFoodsNumber => ProductFoods == null ? 0 : ProductFoods.Count;
         public double ProductionCost { get; set; }
         public ICollection<Category>? Categories { get; set; }
         [Display(Name = "Categorias")]
