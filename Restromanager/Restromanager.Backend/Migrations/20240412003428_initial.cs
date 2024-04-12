@@ -5,7 +5,7 @@
 namespace Restromanager.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class stock : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -187,34 +187,55 @@ namespace Restromanager.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Stock",
+                name: "StockCommercialProducts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    RawMaterialId = table.Column<int>(type: "int", nullable: false),
-                    Aumount = table.Column<int>(type: "int", nullable: false),
+                    Aumount = table.Column<double>(type: "float", nullable: false),
                     UnitsId = table.Column<int>(type: "int", nullable: false),
                     UnitCost = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stock", x => x.Id);
+                    table.PrimaryKey("PK_StockCommercialProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Stock_Products_ProductId",
+                        name: "FK_StockCommercialProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Stock_RawMaterials_RawMaterialId",
+                        name: "FK_StockCommercialProducts_Units_UnitsId",
+                        column: x => x.UnitsId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockRawMaterials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RawMaterialId = table.Column<int>(type: "int", nullable: false),
+                    Aumount = table.Column<double>(type: "float", nullable: false),
+                    UnitsId = table.Column<int>(type: "int", nullable: false),
+                    UnitCost = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockRawMaterials", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockRawMaterials_RawMaterials_RawMaterialId",
                         column: x => x.RawMaterialId,
                         principalTable: "RawMaterials",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Stock_Units_UnitsId",
+                        name: "FK_StockRawMaterials_Units_UnitsId",
                         column: x => x.UnitsId,
                         principalTable: "Units",
                         principalColumn: "Id",
@@ -319,18 +340,23 @@ namespace Restromanager.Backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stock_ProductId",
-                table: "Stock",
+                name: "IX_StockCommercialProducts_ProductId",
+                table: "StockCommercialProducts",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stock_RawMaterialId",
-                table: "Stock",
+                name: "IX_StockCommercialProducts_UnitsId",
+                table: "StockCommercialProducts",
+                column: "UnitsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockRawMaterials_RawMaterialId",
+                table: "StockRawMaterials",
                 column: "RawMaterialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stock_UnitsId",
-                table: "Stock",
+                name: "IX_StockRawMaterials_UnitsId",
+                table: "StockRawMaterials",
                 column: "UnitsId");
 
             migrationBuilder.CreateIndex(
@@ -356,7 +382,10 @@ namespace Restromanager.Backend.Migrations
                 name: "ProductFoods");
 
             migrationBuilder.DropTable(
-                name: "Stock");
+                name: "StockCommercialProducts");
+
+            migrationBuilder.DropTable(
+                name: "StockRawMaterials");
 
             migrationBuilder.DropTable(
                 name: "States");

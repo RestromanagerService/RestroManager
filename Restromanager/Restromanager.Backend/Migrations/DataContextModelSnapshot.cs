@@ -275,7 +275,7 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("States");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Stock", b =>
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.StockCommercialProduct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -283,13 +283,10 @@ namespace Restromanager.Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Aumount")
-                        .HasColumnType("int");
+                    b.Property<double>("Aumount")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RawMaterialId")
                         .HasColumnType("int");
 
                     b.Property<double>("UnitCost")
@@ -302,11 +299,38 @@ namespace Restromanager.Backend.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("UnitsId");
+
+                    b.ToTable("StockCommercialProducts");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.StockRawMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Aumount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RawMaterialId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("UnitCost")
+                        .HasColumnType("float");
+
+                    b.Property<int>("UnitsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("RawMaterialId");
 
                     b.HasIndex("UnitsId");
 
-                    b.ToTable("Stock");
+                    b.ToTable("StockRawMaterials");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Category", b =>
@@ -393,7 +417,7 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Stock", b =>
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.StockCommercialProduct", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
                         .WithMany()
@@ -401,6 +425,19 @@ namespace Restromanager.Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Measures.Unit", "Units")
+                        .WithMany()
+                        .HasForeignKey("UnitsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Units");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.StockRawMaterial", b =>
+                {
                     b.HasOne("Restromanager.Backend.Domain.Entities.RawMaterial", "RawMaterial")
                         .WithMany()
                         .HasForeignKey("RawMaterialId")
@@ -412,8 +449,6 @@ namespace Restromanager.Backend.Migrations
                         .HasForeignKey("UnitsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("RawMaterial");
 
