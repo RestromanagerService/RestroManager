@@ -6,7 +6,7 @@ namespace Restromanager.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FoodsController(IGenericUnitOfWork<Food> unitOfWork) : GenericController<Food>(unitOfWork)
+    public class ProductsController(IGenericUnitOfWork<Product> unitOfWork) : GenericController<Product>(unitOfWork)
     {
     }
 }
