@@ -166,9 +166,9 @@ namespace Orders.Backend.Data
         {
             if (!_context.Categories.Any())
             {
-                _context.Categories.Add(new Category { Name = "Tecnología" });
-                _context.Categories.Add(new Category { Name = "Hogar" });
-                _context.Categories.Add(new Category { Name = "Cosméticos" });
+                _context.Categories.Add(new Category { Name = "Entradas" });
+                _context.Categories.Add(new Category { Name = "Almuerzos" });
+                _context.Categories.Add(new Category { Name = "Bebidas" });
                 await _context.SaveChangesAsync();
             }
         }
