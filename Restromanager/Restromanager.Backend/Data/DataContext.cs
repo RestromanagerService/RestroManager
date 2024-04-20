@@ -21,6 +21,8 @@ namespace Restromanager.Backend.Data
         public DbSet<StockRawMaterial> StockRawMaterials { get; set; }
         public DbSet<StockCommercialProduct> StockCommercialProducts { get; set; }
         public DbSet<Unit> Units { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<TypeReport> TypesReport { get; set; }
 
 
 
@@ -35,6 +37,8 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<RawMaterial>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Unit>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<Report>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<TypeReport>().HasIndex(x => x.Name).IsUnique();
             DisableCascadingDelete(modelBuilder);
         }
 
