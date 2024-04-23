@@ -12,6 +12,7 @@ namespace Orders.Backend.Data
         private readonly Dictionary<string, RawMaterial> _rawMaterials = [];
         private readonly Dictionary<string, Food> _foods = [];
         private readonly Dictionary<string, Product> _products = [];
+        private readonly Dictionary<string, Report> _reports = [];
 
         public SeedDb(DataContext context)
         {
@@ -32,8 +33,33 @@ namespace Orders.Backend.Data
             await CheckProductsAsync();
             await CheckStockCommercialProductsAsync();
             await CheckStockRawMaterialsAsync();
+            await CheckReportsAsync();
+            await CheckTypesReportsAsync();
+            await CheckUserReportAsync();
 
         }
+
+        private async Task CheckUserReportAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task CheckTypesReportsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task CheckReportsAsync()
+        {
+            if (!_context.Reports.Any())
+            {
+                _context.Reports.Add(new Report { Name = "Reporte de Enero",
+                    Description = "Este es el reporte de enero"
+                });
+                await _context.SaveChangesAsync();
+            }
+        }
+
         private void CreateDataUnits()
         {
             _units.Add("Kilogramo", new Unit { Name = "Kilogramo", Symbol = "Kg" });
@@ -132,6 +158,7 @@ namespace Orders.Backend.Data
             _products.Add("GaseosaMandarina300ml", new Product { Name = "Gaseosa de mandarina 300ml" });
             _products.Add("GaseosaUva300ml", new Product { Name = "Gaseosa de uva 300ml" });
         }
+
         private async Task CheckProductsAsync()
         {
             if (!_context.Products.Any())
@@ -195,7 +222,7 @@ namespace Orders.Backend.Data
                                 new City{Name="Medellín"},
                                 new City{Name="Envigado"}
                             ] }
-                    ]
+                        ]
                     });
                 await _context.SaveChangesAsync();
             }

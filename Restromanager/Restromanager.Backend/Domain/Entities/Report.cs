@@ -17,10 +17,11 @@ namespace Restromanager.Backend.Domain.Entities
         public string Description { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
         public int UserId { get; set; }
-        public string UserName { get; set; } = null!;
+        public UserReport? UserReport { get; set; } = null!;
         public TypeReport? TypeReport { get; set; } 
 
-        [Display(Name = "Nombre del gráfico")]
+
+        [Display(Name =  "Nombre del gráfico")]
         [MaxLength(255, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string ChartName { get; set; } = null!;
