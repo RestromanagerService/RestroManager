@@ -1,4 +1,5 @@
-﻿using Restromanager.Backend.Domain.Entities;
+﻿using Orders.DTOs;
+using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.UnitsOfWork.interfaces
@@ -7,5 +8,6 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
     {
         Task<ActionResponse<StockCommercialProduct>> GetAsync(int id);
         Task<ActionResponse<IEnumerable<StockCommercialProduct>>> GetAsync();
+        Task<ActionResponse<IEnumerable<StockCommercialProduct>>> GetAsync(PaginationDTO pagination);
     }
 }

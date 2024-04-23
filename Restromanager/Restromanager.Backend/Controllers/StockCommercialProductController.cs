@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Orders.DTOs;
 using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.UnitsOfWork.interfaces;
 
@@ -10,8 +11,18 @@ namespace Restromanager.Backend.Controllers
     {
         private readonly IStockCommercialProductUnitOfWork _unitOfWork = stockUnitOfWork;
 
-        [HttpGet]
+        [HttpGet("full")]
         public override async Task<IActionResult> GetAsync()
+        {
+            var action = await _unitOfWork.GetAsync();
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+        [HttpGet]
+        public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
             var action = await _unitOfWork.GetAsync();
             if (action.WasSuccess)

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Helpers;
+using Orders.DTOs;
 using Restromanager.Backend.Data;
 using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Repositories.interfaces;
@@ -43,5 +45,18 @@ namespace Restromanager.Backend.Repositories.Implementations
                 Result = products
             };
         }
+        public override async Task<ActionResponse<IEnumerable<Product>>> GetAsync(PaginationDTO pagination)
+        {
+            var queryable = _dataContext.Products
+                .Include(p => p.ProductFoods!)
+                .ThenInclude(pf => pf.Food)
+                .AsQueryable();
+            return new ActionResponse<IEnumerable<Product>>
+            {
+                WasSuccess = true,
+                Result = await queryable.Paginate(pagination).ToListAsync()
+        };
     }
+
+}
 }
