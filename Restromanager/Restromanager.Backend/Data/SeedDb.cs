@@ -12,6 +12,7 @@ namespace Orders.Backend.Data
         private readonly Dictionary<string, RawMaterial> _rawMaterials = [];
         private readonly Dictionary<string, Food> _foods = [];
         private readonly Dictionary<string, Product> _products = [];
+        private readonly Dictionary<string, TypeExpense> _typeExpenses = [];
 
         public SeedDb(DataContext context)
         {
@@ -32,6 +33,8 @@ namespace Orders.Backend.Data
             await CheckProductsAsync();
             await CheckStockCommercialProductsAsync();
             await CheckStockRawMaterialsAsync();
+            CreateDataTypeExpenses();
+            await CheckTypeExpenseAsync();
 
         }
         private void CreateDataUnits()
@@ -46,6 +49,21 @@ namespace Orders.Backend.Data
             {
                 _context.Units.Add(_units["Kilogramo"]);
                 _context.Units.Add(_units["Gramo"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void CreateDataTypeExpenses()
+        {
+            _typeExpenses.Add("Gastos fijos", new TypeExpense { Name = "Gastos fijos" });
+            _typeExpenses.Add("Gastos variables", new TypeExpense { Name = "Gastos variables" });
+        }
+        private async Task CheckTypeExpenseAsync()
+        {
+            if (!_context.TypeExpenses.Any())
+            {
+                _context.TypeExpenses.Add(_typeExpenses["Gastos fijos"]);
+                _context.TypeExpenses.Add(_typeExpenses["Gastos variables"]);
                 await _context.SaveChangesAsync();
             }
         }
