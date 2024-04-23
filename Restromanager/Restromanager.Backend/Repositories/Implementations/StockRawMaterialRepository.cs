@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Helpers;
+using Orders.DTOs;
 using Restromanager.Backend.Data;
 using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Repositories.interfaces;
@@ -44,5 +46,20 @@ namespace Restromanager.Backend.Repositories.Implementations
                 Result = stockRawMaterials
             };
         }
+
+        public override async Task<ActionResponse<IEnumerable<StockRawMaterial>>> GetAsync(PaginationDTO pagination)
+        {
+            var queryable = _dataContext.StockRawMaterials
+                .Include(srm => srm.RawMaterial)
+                .Include(srm => srm.Units)
+                .AsQueryable();
+            return new ActionResponse<IEnumerable<StockRawMaterial>>
+            {
+                WasSuccess = true,
+                Result = await queryable.Paginate(pagination).ToListAsync()
+            };
+        }
+
+
     }
 }
