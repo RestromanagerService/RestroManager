@@ -1,4 +1,4 @@
-﻿namespace Orders.DTOs
+﻿namespace Restromanager.Backend.DTOs
 {
     public class PaginationDTO
     {

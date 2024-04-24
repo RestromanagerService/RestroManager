@@ -1,6 +1,6 @@
-﻿using Orders.DTOs;
+﻿using Restromanager.Backend.DTOs;
 
-namespace Orders.Backend.Helpers
+namespace Restromanager.Backend.Helpers
 {
     public static class QueryableExtensions
     {

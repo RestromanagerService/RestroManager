@@ -1,4 +1,4 @@
-﻿using Orders.DTOs;
+﻿using Restromanager.Backend.DTOs;
 using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.Repositories.interfaces
