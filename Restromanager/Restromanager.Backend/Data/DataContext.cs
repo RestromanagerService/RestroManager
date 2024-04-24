@@ -23,6 +23,7 @@ namespace Restromanager.Backend.Data
         public DbSet<Unit> Units { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<TypeReport> TypesReport { get; set; }
+        public DbSet<UserReport> UserReports { get; set; }
 
 
 
@@ -39,6 +40,7 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<Unit>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Report>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<TypeReport>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<UserReport>().HasIndex(x => x.Name).IsUnique();
             DisableCascadingDelete(modelBuilder);
         }
 

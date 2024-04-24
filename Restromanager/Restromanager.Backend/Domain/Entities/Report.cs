@@ -16,7 +16,6 @@ namespace Restromanager.Backend.Domain.Entities
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string Description { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
-        public int UserId { get; set; }
         public UserReport? UserReport { get; set; } = null!;
         public TypeReport? TypeReport { get; set; } 
 

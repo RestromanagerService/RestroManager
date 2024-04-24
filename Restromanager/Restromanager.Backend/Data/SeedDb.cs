@@ -34,27 +34,27 @@ namespace Orders.Backend.Data
             await CheckStockCommercialProductsAsync();
             await CheckStockRawMaterialsAsync();
             await CheckReportsAsync();
-            await CheckTypesReportsAsync();
-            await CheckUserReportAsync();
+            //await CheckTypesReportsAsync();
+            //await CheckUserReportAsync();
 
         }
 
-        private async Task CheckUserReportAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task CheckTypesReportsAsync()
-        {
-            throw new NotImplementedException();
-        }
 
         private async Task CheckReportsAsync()
         {
             if (!_context.Reports.Any())
             {
-                _context.Reports.Add(new Report { Name = "Reporte de Enero",
-                    Description = "Este es el reporte de enero"
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Enero",
+                    Description = "Este es el reporte de enero",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Norte de Santander" },
+                    TypeReport = new TypeReport { Name = "Ventas" },
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Name",
+                    LabelValue = 1.008m
+
                 });
                 await _context.SaveChangesAsync();
             }
