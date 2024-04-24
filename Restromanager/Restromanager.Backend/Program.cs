@@ -3,8 +3,10 @@ using Orders.Backend.Data;
 using Restromanager.Backend.Data;
 using Restromanager.Backend.Repositories.Implementations;
 using Restromanager.Backend.Repositories.interfaces;
+using Restromanager.Backend.Repositories.Interfaces;
 using Restromanager.Backend.UnitsOfWork.implementations;
 using Restromanager.Backend.UnitsOfWork.interfaces;
+using Restromanager.Backend.UnitsOfWork.Interfaces;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,12 @@ builder.Services.AddScoped<IStockCommercialProductRepository, StockCommercialPro
 builder.Services.AddScoped<IStockCommercialProductUnitOfWork, StockCommercialProductUnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductUnitOfWork, ProductUnitOfWork>();
+builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
+builder.Services.AddScoped<IStatesRepository, StatesRepository>();
+builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
+builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 
 var app = builder.Build();
 
