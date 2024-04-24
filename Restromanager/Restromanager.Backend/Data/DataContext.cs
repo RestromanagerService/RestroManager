@@ -22,6 +22,7 @@ namespace Restromanager.Backend.Data
         public DbSet<StockCommercialProduct> StockCommercialProducts { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<TypeExpense> TypeExpenses { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
 
 
@@ -37,6 +38,14 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<RawMaterial>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Unit>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<TypeExpense>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<Expense>().HasIndex(e => e.TypeExpenseId);
+            modelBuilder.Entity<Expense>()
+                        .Property(e => e.Amount)
+                        .HasPrecision(18, 2);
+            modelBuilder.Entity<TypeExpense>()
+                .HasMany(te => te.Expenses)
+                .WithOne(e => e.TypeExpense)
+                .HasForeignKey(e => e.TypeExpenseId);
             DisableCascadingDelete(modelBuilder);
         }
 

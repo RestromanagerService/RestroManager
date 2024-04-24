@@ -13,6 +13,8 @@ namespace Orders.Backend.Data
         private readonly Dictionary<string, Food> _foods = [];
         private readonly Dictionary<string, Product> _products = [];
         private readonly Dictionary<string, TypeExpense> _typeExpenses = [];
+        private readonly List<Expense> _expenses = new List<Expense>();
+
 
         public SeedDb(DataContext context)
         {
@@ -35,6 +37,7 @@ namespace Orders.Backend.Data
             await CheckStockRawMaterialsAsync();
             CreateDataTypeExpenses();
             await CheckTypeExpenseAsync();
+            await CheckExpensesAsync();
 
         }
         private void CreateDataUnits()
@@ -64,6 +67,35 @@ namespace Orders.Backend.Data
             {
                 _context.TypeExpenses.Add(_typeExpenses["Gastos fijos"]);
                 _context.TypeExpenses.Add(_typeExpenses["Gastos variables"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void CreateDataExpenses()
+        {
+            _expenses.Add(new Expense
+            {
+                Amount = 1000m,
+                TypeExpenseId = _typeExpenses["Gastos fijos"].Id
+            });
+
+            _expenses.Add(new Expense
+            {
+                Amount = 2000m,
+                TypeExpenseId = _typeExpenses["Gastos variables"].Id
+            });
+        }
+
+        private async Task CheckExpensesAsync()
+        {
+            if (!_context.Expenses.Any())
+            {
+                CreateDataExpenses();
+                foreach (var expense in _expenses)
+                {
+                    _context.Expenses.Add(expense);
+                }
+
                 await _context.SaveChangesAsync();
             }
         }
