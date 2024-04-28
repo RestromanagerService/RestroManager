@@ -25,7 +25,7 @@ namespace Restromanager.Backend.Controllers
         [HttpGet]
         public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var action = await _unitOfWork.GetAsync();
+            var action = await _unitOfWork.GetAsync(pagination);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);

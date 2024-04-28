@@ -17,6 +17,8 @@ namespace Restromanager.Backend.Repositories.Implementations
             var product= await _dataContext.Products
                 .Include(p=>p.ProductFoods!)
                 .ThenInclude(pf=>pf.Food)
+                .Include(p => p.ProductFoods!)
+                .ThenInclude(pf => pf.Units)
                 .FirstOrDefaultAsync(p=>p.Id==id);
             if(product == null)
             {
