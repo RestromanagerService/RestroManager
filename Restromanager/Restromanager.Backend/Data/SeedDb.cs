@@ -44,16 +44,43 @@ namespace Orders.Backend.Data
         {
             if (!_context.Reports.Any())
             {
+                var ventas = new TypeReport { Name = "Ventas" };
+                var nomina = new TypeReport { Name = "Nómina" };
+
                 _context.Reports.Add(new Report
                 {
                     Name = "Reporte de Enero",
                     Description = "Este es el reporte de enero",
                     CreatedDate = DateTime.Now,
                     UserReport = new UserReport { Name = "Carlos" },
-                    TypeReport = new TypeReport { Name = "Ventas" },
+                    TypeReport = ventas,
                     ChartName = "Gráfico de barras",
                     LabelName = "Día de la semana",
                     LabelValue = 1.008m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Febrero",
+                    Description = "Este es el reporte de Febrero",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Juan" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.005m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Marzo",
+                    Description = "Este es el reporte de Marzo",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Alirio" },
+                    TypeReport = ventas,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.005m
 
                 });
                 await _context.SaveChangesAsync();

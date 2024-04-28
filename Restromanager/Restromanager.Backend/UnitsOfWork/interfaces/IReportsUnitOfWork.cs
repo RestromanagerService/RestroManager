@@ -10,6 +10,7 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
         Task<ActionResponse<IEnumerable<Report>>> GetAsync(); 
 
         Task<ActionResponse<IEnumerable<Report>>> GetAsync(PaginationDTO pagination);
+        Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
 
     }
 }
