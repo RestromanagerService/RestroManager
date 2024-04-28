@@ -55,7 +55,7 @@ namespace Restromanager.Backend.Repositories.Implementations
             {
                 WasSuccess = true,
                 Result = await queryable.Paginate(pagination).ToListAsync()
-        };
+            };
     }
 }
 }

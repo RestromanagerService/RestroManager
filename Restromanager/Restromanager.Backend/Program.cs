@@ -36,6 +36,9 @@ builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
+builder.Services.AddScoped<IReportsUnitOfWork, ReportsUnitOfWork>();
+builder.Services.AddScoped<IReportsRepository, ReportsRepository>();
+
 
 var app = builder.Build();
 
