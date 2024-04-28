@@ -80,7 +80,117 @@ namespace Orders.Backend.Data
                     TypeReport = ventas,
                     ChartName = "Gráfico de barras",
                     LabelName = "Día de la semana",
-                    LabelValue = 1.005m
+                    LabelValue = 1.2005m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Abril",
+                    Description = "Este es el reporte de Abril",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Juliana" },
+                    TypeReport = ventas,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.0248m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de febrero 2",
+                    Description = "Este es el reporte de febrero",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Sandra" },
+                    TypeReport = ventas,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.43248m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de marzo 2",
+                    Description = "Este es el reporte de marzo",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Ibeth" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.43248m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Enero 1",
+                    Description = "Este es el reporte de Enero 1",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Alberto" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.4348m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Enero 2",
+                    Description = "Este es el reporte de Enero 2",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Karen" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.4248m
+
+                });
+
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de febrero 3",
+                    Description = "Este es el reporte de febrero 3",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Alejandra" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.4348m
+
+                });
+
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de marzo 4",
+                    Description = "Este es el reporte de marzo",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Viany" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.4328m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de abril 4",
+                    Description = "Este es el reporte de abril 4",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Marcos" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.43256m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de abril 5",
+                    Description = "Este es el reporte de abril",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Julian" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.495m
 
                 });
                 await _context.SaveChangesAsync();
