@@ -447,27 +447,6 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("UserReports");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("UserReports");
-                });
-
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.City", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.State", "State")
@@ -565,11 +544,6 @@ namespace Restromanager.Backend.Migrations
                         .HasForeignKey("UserReportId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Restromanager.Backend.Domain.Entities.UserReport", "UserReport")
-                        .WithMany()
-                        .HasForeignKey("UserReportId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("TypeReport");
 
