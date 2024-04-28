@@ -22,6 +22,9 @@ namespace Restromanager.Backend.Data
         public DbSet<StockRawMaterial> StockRawMaterials { get; set; }
         public DbSet<StockCommercialProduct> StockCommercialProducts { get; set; }
         public DbSet<Unit> Units { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<TypeReport> TypesReport { get; set; }
+        public DbSet<UserReport> UserReports { get; set; }
 
 
 
@@ -36,6 +39,9 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<RawMaterial>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Unit>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<Report>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<TypeReport>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<UserReport>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<ProductCategory>().HasIndex(x => new { x.ProductId, x.CategoryId }).IsUnique();
             modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => new { x.FoodId, x.RawMaterialId }).IsUnique();
             modelBuilder.Entity <ProductFood>().HasIndex(x => new { x.ProductId,x.FoodId}).IsUnique();
