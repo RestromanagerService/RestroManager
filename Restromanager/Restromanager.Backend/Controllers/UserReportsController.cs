@@ -6,7 +6,7 @@ namespace Restromanager.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserReportsController
+    public class UserReports(IGenericUnitOfWork<UserReport> unitOfWork) : GenericController<UserReport>(unitOfWork)
     {
     }
 }
