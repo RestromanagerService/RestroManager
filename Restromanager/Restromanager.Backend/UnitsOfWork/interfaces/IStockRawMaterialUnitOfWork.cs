@@ -9,5 +9,6 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
         Task<ActionResponse<StockRawMaterial>> GetAsync(int id);
         Task<ActionResponse<IEnumerable<StockRawMaterial>>> GetAsync();
         Task<ActionResponse<IEnumerable<StockRawMaterial>>> GetAsync(PaginationDTO pagination);
+        Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
     }
 }
