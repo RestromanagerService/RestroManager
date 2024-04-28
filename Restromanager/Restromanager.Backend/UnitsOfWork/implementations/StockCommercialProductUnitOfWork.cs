@@ -1,5 +1,6 @@
 ﻿using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.DTOs;
+using Restromanager.Backend.Repositories.Implementations;
 using Restromanager.Backend.Repositories.interfaces;
 using Restromanager.Backend.Responses;
 using Restromanager.Backend.UnitsOfWork.interfaces;
@@ -16,6 +17,7 @@ namespace Restromanager.Backend.UnitsOfWork.implementations
 
         public override async Task<ActionResponse<IEnumerable<StockCommercialProduct>>> GetAsync(PaginationDTO pagination) => await _stockCommercialProductRepository.GetAsync(pagination);
         public override async Task<ActionResponse<StockCommercialProduct>> UpdateAsync(StockCommercialProduct model) => await _stockCommercialProductRepository.UpdateAsync(model);
+        public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _stockCommercialProductRepository.GetTotalPagesAsync(pagination);
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.DTOs;
+using Restromanager.Backend.UnitsOfWork.implementations;
 using Restromanager.Backend.UnitsOfWork.interfaces;
 using Restromanager.Backend.UnitsOfWork.Interfaces;
 
@@ -37,6 +38,17 @@ namespace Restromanager.Backend.Controllers
         public override async Task<IActionResult> GetAsync(int id)
         {
             var action = await _countriesUnitOfWork.GetAsync(id);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("totalPages")]
+        public override async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var action = await _countriesUnitOfWork.GetTotalPagesAsync(pagination);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
