@@ -24,6 +24,10 @@ namespace Restromanager.Backend.Data
         public DbSet<TypeExpense> TypeExpenses { get; set; }
         public DbSet<Expense> Expenses { get; set; }
 
+        public DbSet<TypeIncome> TypeIncomes { get; set; }
+        
+        public DbSet<Income> Incomes { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,6 +50,15 @@ namespace Restromanager.Backend.Data
                 .HasMany(te => te.Expenses)
                 .WithOne(e => e.TypeExpense)
                 .HasForeignKey(e => e.TypeExpenseId);
+            modelBuilder.Entity<TypeIncome>().HasIndex(e => e.Name).IsUnique();
+            modelBuilder.Entity<Income>().HasIndex(e => e.TypeIncomeId);
+            modelBuilder.Entity<Income>()
+                .Property(e => e.Amount)
+                .HasPrecision(18, 2);
+            modelBuilder.Entity<TypeIncome>()
+                .HasMany(ti => ti.Expenses)
+                .WithOne(i => i.TypeIncome)
+                .HasForeignKey(i => i.TypeIncomeId);
             DisableCascadingDelete(modelBuilder);
         }
 

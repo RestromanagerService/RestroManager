@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restromanager.Backend.Data;
 
@@ -11,9 +12,11 @@ using Restromanager.Backend.Data;
 namespace Restromanager.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240428133241_description in expense entity")]
+    partial class descriptioninexpenseentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,32 +176,6 @@ namespace Restromanager.Backend.Migrations
                     b.HasIndex("UnitsId");
 
                     b.ToTable("FoodRawMaterials");
-                });
-
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Income", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TypeIncomeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TypeIncomeId");
-
-                    b.ToTable("Incomes");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Measures.Unit", b =>
@@ -406,27 +383,6 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("TypeExpenses");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeIncome", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("TypeIncomes");
-                });
-
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Category", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.Product", null)
@@ -482,17 +438,6 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("RawMaterial");
 
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Income", b =>
-                {
-                    b.HasOne("Restromanager.Backend.Domain.Entities.TypeIncome", "TypeIncome")
-                        .WithMany("Expenses")
-                        .HasForeignKey("TypeIncomeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("TypeIncome");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.ProductFood", b =>
@@ -594,11 +539,6 @@ namespace Restromanager.Backend.Migrations
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeExpense", b =>
-                {
-                    b.Navigation("Expenses");
-                });
-
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeIncome", b =>
                 {
                     b.Navigation("Expenses");
                 });

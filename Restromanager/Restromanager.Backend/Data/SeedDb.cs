@@ -14,7 +14,8 @@ namespace Orders.Backend.Data
         private readonly Dictionary<string, Product> _products = [];
         private readonly Dictionary<string, TypeExpense> _typeExpenses = [];
         private readonly List<Expense> _expenses = new List<Expense>();
-
+        private readonly Dictionary<string, TypeIncome> _typeIncomes = [];
+        private readonly List<Income> _incomes = new List<Income>();
 
         public SeedDb(DataContext context)
         {
@@ -38,7 +39,9 @@ namespace Orders.Backend.Data
             CreateDataTypeExpenses();
             await CheckTypeExpenseAsync();
             await CheckExpensesAsync();
-
+            CreateDataTypeIncomes();
+            await CheckTypeIncomeAsync();
+            await CheckIncomeAsync();
         }
         private void CreateDataUnits()
         {
@@ -70,19 +73,66 @@ namespace Orders.Backend.Data
                 await _context.SaveChangesAsync();
             }
         }
+        private void CreateDataTypeIncomes()
+        {
+            _typeIncomes.Add("Ganancias regulares", new TypeIncome { Name = "Ganancias regulares" });
+            _typeIncomes.Add("Ganancias NO regulares", new TypeIncome { Name = "Ganancias NO regulares" });
+        }
+
+        private async Task CheckTypeIncomeAsync()
+        {
+            if (!_context.TypeIncomes.Any())
+            {
+                _context.TypeIncomes.Add(_typeIncomes["Ganancias regulares"]);
+                _context.TypeIncomes.Add(_typeIncomes["Ganancias NO regulares"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void CreateDataIncomes()
+        {
+            _incomes.Add(new Income
+            {
+                Description = "Pago plato 1",
+                Amount = 1000m,
+                TypeIncomeId = _typeIncomes["Ganancias regulares"].Id
+            });
+
+            _incomes.Add(new Income
+            {
+                Description = "Resultado de ganancia de rifa",
+                Amount = 20000m,
+                TypeIncomeId = _typeIncomes["Ganancias NO regulares"].Id
+            });
+        }
+
+        private async Task CheckIncomeAsync()
+        {
+            if (!_context.Incomes.Any())
+            {
+                CreateDataIncomes();
+                foreach (var income in _incomes)
+                {
+                    _context.Incomes.Add(income);
+                }
+                await _context.SaveChangesAsync();
+            }
+        }
+
 
         private void CreateDataExpenses()
         {
             _expenses.Add(new Expense
             {
+                Description = "Pago de energía",
                 Amount = 1000m,
-                TypeExpenseId = _typeExpenses["Gastos fijos"].Id
+                TypeExpenseId = _typeExpenses["Gastos fijos"].Id,
             });
 
             _expenses.Add(new Expense
-            {
+            {   Description= "Pago de de fiesta del jefe",
                 Amount = 2000m,
-                TypeExpenseId = _typeExpenses["Gastos variables"].Id
+                TypeExpenseId = _typeExpenses["Gastos variables"].Id,
             });
         }
 
