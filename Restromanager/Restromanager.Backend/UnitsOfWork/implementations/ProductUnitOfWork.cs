@@ -16,7 +16,10 @@ namespace Restromanager.Backend.UnitsOfWork.implementations
 
         public override async Task<ActionResponse<IEnumerable<Product>>> GetAsync(PaginationDTO pagination) => await _productRepository.GetAsync(pagination);
 
+        public virtual async Task<ActionResponse<IEnumerable<Product>>> GetRecipesAsync(PaginationDTO pagination) => await _productRepository.GetRecipesAsync(pagination);
 
+        public virtual async Task<ActionResponse<IEnumerable<Product>>> GetRecipesAsync()=> await _productRepository.GetRecipesAsync();
+        public virtual async Task<ActionResponse<int>> GetRecipesTotalPagesAsync(PaginationDTO pagination) => await _productRepository.GetRecipesTotalPagesAsync(pagination);
     }
 
 }

@@ -31,6 +31,36 @@ namespace Restromanager.Backend.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("recipes")]
+        public async Task<IActionResult> GetRecipesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var action = await _unitOfWork.GetRecipesAsync(pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+        [HttpGet("recipes/totalpages")]
+        public async Task<IActionResult> GetRecipesTotalPagesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var action = await _unitOfWork.GetRecipesTotalPagesAsync(pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+        [HttpGet("recipes/full")]
+        public async Task<IActionResult> GetRecipesAsync()
+        {
+            var action = await _unitOfWork.GetRecipesAsync();
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
         [HttpGet("{id}")]
         public override async Task<IActionResult> GetAsync(int id)
         {
