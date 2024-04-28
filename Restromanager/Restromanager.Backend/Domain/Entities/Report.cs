@@ -16,8 +16,12 @@ namespace Restromanager.Backend.Domain.Entities
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string Description { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
-        public UserReport? UserReport { get; set; } = null!;
-        public TypeReport? TypeReport { get; set; } 
+
+        public UserReport? UserReport { get; set; }
+        public int UserReportId { get; set; }
+        
+        public TypeReport? TypeReport { get; set; }
+        public int TypeReportId { get; set; }
 
 
         [Display(Name =  "Nombre del gráfico")]

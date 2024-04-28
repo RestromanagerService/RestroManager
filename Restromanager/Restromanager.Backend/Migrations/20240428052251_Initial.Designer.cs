@@ -12,8 +12,8 @@ using Restromanager.Backend.Data;
 namespace Restromanager.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240428050821_initial")]
-    partial class initial
+    [Migration("20240428052251_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -308,10 +308,10 @@ namespace Restromanager.Backend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("TypeReportId")
+                    b.Property<int>("TypeReportId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserReportId")
+                    b.Property<int>("UserReportId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -539,12 +539,14 @@ namespace Restromanager.Backend.Migrations
                     b.HasOne("Restromanager.Backend.Domain.Entities.TypeReport", "TypeReport")
                         .WithMany()
                         .HasForeignKey("TypeReportId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.UserReport", "UserReport")
                         .WithMany()
                         .HasForeignKey("UserReportId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("TypeReport");
 

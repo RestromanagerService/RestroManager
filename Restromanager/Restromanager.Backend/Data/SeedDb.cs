@@ -49,10 +49,10 @@ namespace Orders.Backend.Data
                     Name = "Reporte de Enero",
                     Description = "Este es el reporte de enero",
                     CreatedDate = DateTime.Now,
-                    UserReport = new UserReport { Name = "Norte de Santander" },
+                    UserReport = new UserReport { Name = "Carlos" },
                     TypeReport = new TypeReport { Name = "Ventas" },
                     ChartName = "Gráfico de barras",
-                    LabelName = "Name",
+                    LabelName = "Día de la semana",
                     LabelValue = 1.008m
 
                 });

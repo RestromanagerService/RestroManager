@@ -305,10 +305,10 @@ namespace Restromanager.Backend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("TypeReportId")
+                    b.Property<int>("TypeReportId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserReportId")
+                    b.Property<int>("UserReportId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -536,12 +536,14 @@ namespace Restromanager.Backend.Migrations
                     b.HasOne("Restromanager.Backend.Domain.Entities.TypeReport", "TypeReport")
                         .WithMany()
                         .HasForeignKey("TypeReportId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.UserReport", "UserReport")
                         .WithMany()
                         .HasForeignKey("UserReportId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("TypeReport");
 

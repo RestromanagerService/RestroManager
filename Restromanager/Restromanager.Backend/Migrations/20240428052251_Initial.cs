@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Restromanager.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -297,8 +297,8 @@ namespace Restromanager.Backend.Migrations
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserReportId = table.Column<int>(type: "int", nullable: true),
-                    TypeReportId = table.Column<int>(type: "int", nullable: true),
+                    UserReportId = table.Column<int>(type: "int", nullable: false),
+                    TypeReportId = table.Column<int>(type: "int", nullable: false),
                     ChartName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     LabelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LabelValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false)

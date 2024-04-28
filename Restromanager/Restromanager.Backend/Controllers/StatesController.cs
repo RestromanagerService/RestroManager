@@ -9,7 +9,7 @@ namespace Restromanager.Backend.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class StatesController(IGenericUnitOfWork<State> unitOfWork, IStatesUnitOfWork statesUnitOfWork) : GenericController<State>(unitOfWork)
-    { /**
+    { 
         private readonly IStatesUnitOfWork _statesUnitOfWork = statesUnitOfWork;
 
         [HttpGet("full")]
@@ -54,5 +54,5 @@ namespace Restromanager.Backend.Controllers
             return BadRequest();
         }
 
-    **/ }
+    }
 }
