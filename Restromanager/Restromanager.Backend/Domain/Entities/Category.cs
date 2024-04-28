@@ -9,6 +9,6 @@ namespace Restromanager.Backend.Domain.Entities
         [Display(Name = "Categoría")]
         [MaxLength(255, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es requerido.")]
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = null!;//TODO: revisar tabla de unión de categorías
     }
 }

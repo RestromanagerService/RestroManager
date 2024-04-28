@@ -16,6 +16,8 @@ namespace Restromanager.Backend.Repositories.Implementations
         {
             var stockCommercialProduct=await _dataContext.StockCommercialProducts
                 .Include(srm=>srm.Product)
+                .ThenInclude(p => p!.ProductCategories!)
+                .ThenInclude(c=>c.Category)
                 .Include(srm=>srm.Units)
                 .FirstOrDefaultAsync(srm => srm.Id == id);
             if(stockCommercialProduct == null)
@@ -37,6 +39,8 @@ namespace Restromanager.Backend.Repositories.Implementations
         {
             var stockCommercialProducts = await _dataContext.StockCommercialProducts
                 .Include(srm => srm.Product)
+                .ThenInclude(p => p!.ProductCategories!)
+                .ThenInclude(c => c.Category)
                 .Include(srm => srm.Units)
                 .ToListAsync();
             return new ActionResponse<IEnumerable<StockCommercialProduct>>
@@ -49,13 +53,56 @@ namespace Restromanager.Backend.Repositories.Implementations
         {
             var queryable = _dataContext.StockCommercialProducts
                 .Include(srm => srm.Product)
+                .ThenInclude(p => p!.ProductCategories!)
+                .ThenInclude(c => c.Category)
                 .Include(srm => srm.Units)
                 .AsQueryable();
             return new ActionResponse<IEnumerable<StockCommercialProduct>>
             {
                 WasSuccess = true,
                 Result = await queryable.Paginate(pagination).ToListAsync()
-        };
+            };
+        }
+        public override async Task<ActionResponse<StockCommercialProduct>> UpdateAsync(StockCommercialProduct entity)
+        {
+            
+            
+            try
+            {
+                await _dataContext.ProductCategories.Where(p => p.ProductId == entity.ProductId).ExecuteDeleteAsync();
+                _dataContext.Update(entity);
+                await _dataContext.SaveChangesAsync();
+                return new ActionResponse<StockCommercialProduct>
+                {
+                    WasSuccess = true,
+                    Result = entity
+                };
+            }
+            catch (DbUpdateException)
+            {
+                return DbUpdateExceptionActionResponse();
+            }
+            catch (Exception ex)
+            {
+                return ExceptionActionResponse(ex);
+            }
+        }
+        private ActionResponse<StockCommercialProduct> ExceptionActionResponse(Exception exception)
+        {
+            return new ActionResponse<StockCommercialProduct>
+            {
+                WasSuccess = false,
+                Message = exception.Message
+            };
+        }
+
+        private ActionResponse<StockCommercialProduct> DbUpdateExceptionActionResponse()
+        {
+            return new ActionResponse<StockCommercialProduct>
+            {
+                WasSuccess = false,
+                Message = "Ya existe el registro que estas intentando crear"
+            };
+        }
     }
-}
 }

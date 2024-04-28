@@ -17,6 +17,7 @@ namespace Restromanager.Backend.Data
         public DbSet<FoodRawMaterial> FoodRawMaterials { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductFood> ProductFoods { get; set; }
         public DbSet<StockRawMaterial> StockRawMaterials { get; set; }
         public DbSet<StockCommercialProduct> StockCommercialProducts { get; set; }
@@ -35,6 +36,9 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<RawMaterial>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Unit>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<ProductCategory>().HasIndex(x => new { x.ProductId, x.CategoryId }).IsUnique();
+            modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => new { x.FoodId, x.RawMaterialId }).IsUnique();
+            modelBuilder.Entity <ProductFood>().HasIndex(x => new { x.ProductId,x.FoodId}).IsUnique();
             DisableCascadingDelete(modelBuilder);
         }
 
