@@ -93,6 +93,8 @@ namespace Restromanager.Backend.Repositories.Implementations
                 .ThenInclude(pf => pf.Food)
                 .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
                 .ToListAsync();
+
+
             return new ActionResponse<IEnumerable<Product>>
             {
                 WasSuccess = true,
@@ -107,6 +109,12 @@ namespace Restromanager.Backend.Repositories.Implementations
                 .ThenInclude(pf => pf.Food)
                 .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
                 .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
             return new ActionResponse<IEnumerable<Product>>
             {
                 WasSuccess = true,
@@ -120,6 +128,12 @@ namespace Restromanager.Backend.Repositories.Implementations
                 .ThenInclude(pf => pf.Food)
                 .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
                 .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
             double count = await queryable.CountAsync();
             int totalPages = (int)Math.Ceiling(count / pagination.RecordsNumber);
             return new ActionResponse<int>
