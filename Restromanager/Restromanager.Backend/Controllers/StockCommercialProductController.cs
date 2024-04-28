@@ -41,5 +41,16 @@ namespace Restromanager.Backend.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut]
+        public override async Task<IActionResult> PutAsync(StockCommercialProduct model)
+        {
+            var action = await _unitOfWork.UpdateAsync(model);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
     }
 }

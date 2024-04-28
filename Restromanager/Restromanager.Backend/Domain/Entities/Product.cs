@@ -15,8 +15,8 @@ namespace Restromanager.Backend.Domain.Entities
         [Display(Name = "Alimentos")]
         public int ProductFoodsNumber => ProductFoods == null ? 0 : ProductFoods.Count;
         public double ProductionCost { get; set; }
-        public ICollection<Category>? Categories { get; set; }
+        public ICollection<ProductCategory>? ProductCategories { get; set; }
         [Display(Name = "Categorias")]
-        public int CategoriesNumber => Categories == null ? 0 : Categories.Count;
+        public int ProductCategoriesNumber => ProductCategories == null ? 0 : ProductCategories.Count;
     }
 }
