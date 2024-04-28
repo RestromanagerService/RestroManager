@@ -16,6 +16,7 @@ namespace Orders.Backend.Data
         private readonly List<Expense> _expenses = new List<Expense>();
         private readonly Dictionary<string, TypeIncome> _typeIncomes = [];
         private readonly List<Income> _incomes = new List<Income>();
+        private readonly Dictionary<string, Report> _reports = [];
 
         public SeedDb(DataContext context)
         {
@@ -41,8 +42,60 @@ namespace Orders.Backend.Data
             await CheckExpensesAsync();
             CreateDataTypeIncomes();
             await CheckTypeIncomeAsync();
-            await CheckIncomeAsync();
+            await CheckIncomeAsync();            await CheckReportsAsync();
+            //await CheckTypesReportsAsync();
+            //await CheckUserReportAsync();
+
         }
+
+
+        private async Task CheckReportsAsync()
+        {
+            if (!_context.Reports.Any())
+            {
+                var ventas = new TypeReport { Name = "Ventas" };
+                var nomina = new TypeReport { Name = "Nómina" };
+
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Enero",
+                    Description = "Este es el reporte de enero",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Carlos" },
+                    TypeReport = ventas,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.008m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Febrero",
+                    Description = "Este es el reporte de Febrero",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Juan" },
+                    TypeReport = nomina,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.005m
+
+                });
+                _context.Reports.Add(new Report
+                {
+                    Name = "Reporte de Marzo",
+                    Description = "Este es el reporte de Marzo",
+                    CreatedDate = DateTime.Now,
+                    UserReport = new UserReport { Name = "Alirio" },
+                    TypeReport = ventas,
+                    ChartName = "Gráfico de barras",
+                    LabelName = "Día de la semana",
+                    LabelValue = 1.005m
+
+                });
+                await _context.SaveChangesAsync();
+            }
+        }
+
         private void CreateDataUnits()
         {
             _units.Add("Kilogramo", new Unit { Name = "Kilogramo", Symbol = "Kg" });
@@ -232,6 +285,7 @@ namespace Orders.Backend.Data
             _products.Add("GaseosaMandarina300ml", new Product { Name = "Gaseosa de mandarina 300ml" });
             _products.Add("GaseosaUva300ml", new Product { Name = "Gaseosa de uva 300ml" });
         }
+
         private async Task CheckProductsAsync()
         {
             if (!_context.Products.Any())
@@ -295,7 +349,7 @@ namespace Orders.Backend.Data
                                 new City{Name="Medellín"},
                                 new City{Name="Envigado"}
                             ] }
-                    ]
+                        ]
                     });
                 await _context.SaveChangesAsync();
             }
