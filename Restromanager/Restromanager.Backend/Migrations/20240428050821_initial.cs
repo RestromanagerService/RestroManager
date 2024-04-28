@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -10,6 +11,19 @@ namespace Restromanager.Backend.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
@@ -65,6 +79,19 @@ namespace Restromanager.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TypesReport",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TypesReport", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Units",
                 columns: table => new
                 {
@@ -76,6 +103,19 @@ namespace Restromanager.Backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Units", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserReports", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,19 +139,25 @@ namespace Restromanager.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "ProductCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_ProductCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Products_ProductId",
+                        name: "FK_ProductCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductCategories_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -243,6 +289,38 @@ namespace Restromanager.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserReportId = table.Column<int>(type: "int", nullable: true),
+                    TypeReportId = table.Column<int>(type: "int", nullable: true),
+                    ChartName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    LabelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LabelValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reports_TypesReport_TypeReportId",
+                        column: x => x.TypeReportId,
+                        principalTable: "TypesReport",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reports_UserReports_UserReportId",
+                        column: x => x.UserReportId,
+                        principalTable: "UserReports",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
                 {
@@ -269,11 +347,6 @@ namespace Restromanager.Backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_ProductId",
-                table: "Categories",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId_Name",
                 table: "Cities",
                 columns: new[] { "StateId", "Name" },
@@ -286,9 +359,10 @@ namespace Restromanager.Backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FoodRawMaterials_FoodId",
+                name: "IX_FoodRawMaterials_FoodId_RawMaterialId",
                 table: "FoodRawMaterials",
-                column: "FoodId");
+                columns: new[] { "FoodId", "RawMaterialId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_FoodRawMaterials_RawMaterialId",
@@ -307,14 +381,26 @@ namespace Restromanager.Backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductCategories_CategoryId",
+                table: "ProductCategories",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCategories_ProductId_CategoryId",
+                table: "ProductCategories",
+                columns: new[] { "ProductId", "CategoryId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductFoods_FoodId",
                 table: "ProductFoods",
                 column: "FoodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductFoods_ProductId",
+                name: "IX_ProductFoods_ProductId_FoodId",
                 table: "ProductFoods",
-                column: "ProductId");
+                columns: new[] { "ProductId", "FoodId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductFoods_UnitsId",
@@ -332,6 +418,22 @@ namespace Restromanager.Backend.Migrations
                 table: "RawMaterials",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_Name",
+                table: "Reports",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_TypeReportId",
+                table: "Reports",
+                column: "TypeReportId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_UserReportId",
+                table: "Reports",
+                column: "UserReportId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId_Name",
@@ -360,8 +462,20 @@ namespace Restromanager.Backend.Migrations
                 column: "UnitsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TypesReport_Name",
+                table: "TypesReport",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Units_Name",
                 table: "Units",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserReports_Name",
+                table: "UserReports",
                 column: "Name",
                 unique: true);
         }
@@ -370,16 +484,19 @@ namespace Restromanager.Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
                 name: "Cities");
 
             migrationBuilder.DropTable(
                 name: "FoodRawMaterials");
 
             migrationBuilder.DropTable(
+                name: "ProductCategories");
+
+            migrationBuilder.DropTable(
                 name: "ProductFoods");
+
+            migrationBuilder.DropTable(
+                name: "Reports");
 
             migrationBuilder.DropTable(
                 name: "StockCommercialProducts");
@@ -391,7 +508,16 @@ namespace Restromanager.Backend.Migrations
                 name: "States");
 
             migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "Foods");
+
+            migrationBuilder.DropTable(
+                name: "TypesReport");
+
+            migrationBuilder.DropTable(
+                name: "UserReports");
 
             migrationBuilder.DropTable(
                 name: "Products");
