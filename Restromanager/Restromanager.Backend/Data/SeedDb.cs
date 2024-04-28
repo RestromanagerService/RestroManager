@@ -12,6 +12,10 @@ namespace Orders.Backend.Data
         private readonly Dictionary<string, RawMaterial> _rawMaterials = [];
         private readonly Dictionary<string, Food> _foods = [];
         private readonly Dictionary<string, Product> _products = [];
+        private readonly Dictionary<string, TypeExpense> _typeExpenses = [];
+        private readonly List<Expense> _expenses = new List<Expense>();
+        private readonly Dictionary<string, TypeIncome> _typeIncomes = [];
+        private readonly List<Income> _incomes = new List<Income>();
         private readonly Dictionary<string, Report> _reports = [];
 
         public SeedDb(DataContext context)
@@ -33,7 +37,12 @@ namespace Orders.Backend.Data
             await CheckProductsAsync();
             await CheckStockCommercialProductsAsync();
             await CheckStockRawMaterialsAsync();
-            await CheckReportsAsync();
+            CreateDataTypeExpenses();
+            await CheckTypeExpenseAsync();
+            await CheckExpensesAsync();
+            CreateDataTypeIncomes();
+            await CheckTypeIncomeAsync();
+            await CheckIncomeAsync();            await CheckReportsAsync();
             //await CheckTypesReportsAsync();
             //await CheckUserReportAsync();
 
@@ -99,6 +108,97 @@ namespace Orders.Backend.Data
             {
                 _context.Units.Add(_units["Kilogramo"]);
                 _context.Units.Add(_units["Gramo"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void CreateDataTypeExpenses()
+        {
+            _typeExpenses.Add("Gastos fijos", new TypeExpense { Name = "Gastos fijos" });
+            _typeExpenses.Add("Gastos variables", new TypeExpense { Name = "Gastos variables" });
+        }
+        private async Task CheckTypeExpenseAsync()
+        {
+            if (!_context.TypeExpenses.Any())
+            {
+                _context.TypeExpenses.Add(_typeExpenses["Gastos fijos"]);
+                _context.TypeExpenses.Add(_typeExpenses["Gastos variables"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+        private void CreateDataTypeIncomes()
+        {
+            _typeIncomes.Add("Ganancias regulares", new TypeIncome { Name = "Ganancias regulares" });
+            _typeIncomes.Add("Ganancias NO regulares", new TypeIncome { Name = "Ganancias NO regulares" });
+        }
+
+        private async Task CheckTypeIncomeAsync()
+        {
+            if (!_context.TypeIncomes.Any())
+            {
+                _context.TypeIncomes.Add(_typeIncomes["Ganancias regulares"]);
+                _context.TypeIncomes.Add(_typeIncomes["Ganancias NO regulares"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void CreateDataIncomes()
+        {
+            _incomes.Add(new Income
+            {
+                Description = "Pago plato 1",
+                Amount = 1000m,
+                TypeIncomeId = _typeIncomes["Ganancias regulares"].Id
+            });
+
+            _incomes.Add(new Income
+            {
+                Description = "Resultado de ganancia de rifa",
+                Amount = 20000m,
+                TypeIncomeId = _typeIncomes["Ganancias NO regulares"].Id
+            });
+        }
+
+        private async Task CheckIncomeAsync()
+        {
+            if (!_context.Incomes.Any())
+            {
+                CreateDataIncomes();
+                foreach (var income in _incomes)
+                {
+                    _context.Incomes.Add(income);
+                }
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
+        private void CreateDataExpenses()
+        {
+            _expenses.Add(new Expense
+            {
+                Description = "Pago de energía",
+                Amount = 1000m,
+                TypeExpenseId = _typeExpenses["Gastos fijos"].Id,
+            });
+
+            _expenses.Add(new Expense
+            {   Description= "Pago de de fiesta del jefe",
+                Amount = 2000m,
+                TypeExpenseId = _typeExpenses["Gastos variables"].Id,
+            });
+        }
+
+        private async Task CheckExpensesAsync()
+        {
+            if (!_context.Expenses.Any())
+            {
+                CreateDataExpenses();
+                foreach (var expense in _expenses)
+                {
+                    _context.Expenses.Add(expense);
+                }
+
                 await _context.SaveChangesAsync();
             }
         }

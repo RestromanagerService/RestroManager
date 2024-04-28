@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restromanager.Backend.Data;
 
@@ -11,9 +12,11 @@ using Restromanager.Backend.Data;
 namespace Restromanager.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240428175704_Income and TypeIncomeCrud")]
+    partial class IncomeandTypeIncomeCrud
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,10 +38,15 @@ namespace Restromanager.Backend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Categories");
                 });
@@ -161,12 +169,11 @@ namespace Restromanager.Backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FoodId");
+
                     b.HasIndex("RawMaterialId");
 
                     b.HasIndex("UnitsId");
-
-                    b.HasIndex("FoodId", "RawMaterialId")
-                        .IsUnique();
 
                     b.ToTable("FoodRawMaterials");
                 });
@@ -246,30 +253,6 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.ProductCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductId", "CategoryId")
-                        .IsUnique();
-
-                    b.ToTable("ProductCategories");
-                });
-
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.ProductFood", b =>
                 {
                     b.Property<int>("Id")
@@ -295,10 +278,9 @@ namespace Restromanager.Backend.Migrations
 
                     b.HasIndex("FoodId");
 
-                    b.HasIndex("UnitsId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId", "FoodId")
-                        .IsUnique();
+                    b.HasIndex("UnitsId");
 
                     b.ToTable("ProductFoods");
                 });
@@ -322,57 +304,6 @@ namespace Restromanager.Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("RawMaterials");
-                });
-
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ChartName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("LabelName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("LabelValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("TypeReportId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserReportId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("TypeReportId");
-
-                    b.HasIndex("UserReportId");
-
-                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.State", b =>
@@ -499,46 +430,12 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("TypeIncomes");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeReport", b =>
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("TypesReport");
-                });
-
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.UserReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("UserReports");
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Product", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.City", b =>
@@ -601,25 +498,6 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("TypeIncome");
                 });
 
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.ProductCategory", b =>
-                {
-                    b.HasOne("Restromanager.Backend.Domain.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
-                        .WithMany("ProductCategories")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.ProductFood", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.Food", "Food")
@@ -645,25 +523,6 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Report", b =>
-                {
-                    b.HasOne("Restromanager.Backend.Domain.Entities.TypeReport", "TypeReport")
-                        .WithMany()
-                        .HasForeignKey("TypeReportId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Restromanager.Backend.Domain.Entities.UserReport", "UserReport")
-                        .WithMany()
-                        .HasForeignKey("UserReportId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("TypeReport");
-
-                    b.Navigation("UserReport");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.State", b =>
@@ -727,7 +586,7 @@ namespace Restromanager.Backend.Migrations
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("ProductCategories");
+                    b.Navigation("Categories");
 
                     b.Navigation("ProductFoods");
                 });
