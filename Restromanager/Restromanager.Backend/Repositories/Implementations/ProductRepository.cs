@@ -84,5 +84,47 @@ namespace Restromanager.Backend.Repositories.Implementations
 
         }
 
+        public virtual async Task<ActionResponse<IEnumerable<Product>>> GetRecipesAsync()
+        {
+            var products = await _dataContext.Products
+                .Include(p => p.ProductFoods!)
+                .ThenInclude(pf => pf.Food)
+                .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
+                .ToListAsync();
+            return new ActionResponse<IEnumerable<Product>>
+            {
+                WasSuccess = true,
+                Result = products
+            };
+        }
+
+        public virtual async Task<ActionResponse<IEnumerable<Product>>> GetRecipesAsync(PaginationDTO pagination)
+        {
+            var queryable = _dataContext.Products
+                .Include(p => p.ProductFoods!)
+                .ThenInclude(pf => pf.Food)
+                .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
+                .AsQueryable();
+            return new ActionResponse<IEnumerable<Product>>
+            {
+                WasSuccess = true,
+                Result = await queryable.Paginate(pagination).ToListAsync()
+            };
+        }
+        public virtual async Task<ActionResponse<int>> GetRecipesTotalPagesAsync(PaginationDTO pagination)
+        {
+            var queryable = _dataContext.Products
+                .Include(p => p.ProductFoods!)
+                .ThenInclude(pf => pf.Food)
+                .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
+                .AsQueryable();
+            double count = await queryable.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / pagination.RecordsNumber);
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = totalPages
+            };
+        }
     }
 }
