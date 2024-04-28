@@ -1,5 +1,6 @@
 ﻿using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.DTOs;
+using Restromanager.Backend.Repositories.Implementations;
 using Restromanager.Backend.Repositories.interfaces;
 using Restromanager.Backend.Repositories.Interfaces;
 using Restromanager.Backend.Responses;
@@ -17,5 +18,6 @@ namespace Restromanager.Backend.UnitsOfWork.implementations
 
         public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination) => 
             await _countriesRepository.GetAsync(pagination);
+        public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _countriesRepository.GetTotalPagesAsync(pagination);
     }
 }

@@ -51,9 +51,18 @@ namespace Restromanager.Backend.Repositories.Implementations
             };
         }
 
-        public async Task<ActionResponse<IEnumerable<Report>>> GetAsync(PaginationDTO pagination)
+        public override async Task<ActionResponse<IEnumerable<Report>>> GetAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Reports.Include(x => x.UserReport).Include(y => y.TypeReport).AsQueryable();
+            var queryable = _context.Reports
+                .Include(x => x.UserReport)
+                .Include(y => y.TypeReport)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
             return new ActionResponse<IEnumerable<Report>>
             {
                 WasSuccess = true,
@@ -64,7 +73,24 @@ namespace Restromanager.Backend.Repositories.Implementations
             };
         }
 
+        public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
+        {
+            var queryable = _context.Reports.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            double count = await queryable.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / pagination.RecordsNumber);
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = totalPages
+            };
 
 
+        }
     }
 }

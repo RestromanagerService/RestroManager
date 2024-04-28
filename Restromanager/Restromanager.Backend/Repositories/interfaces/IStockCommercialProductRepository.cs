@@ -10,5 +10,6 @@ namespace Restromanager.Backend.Repositories.interfaces
         Task<ActionResponse<IEnumerable<StockCommercialProduct>>> GetAsync();
         Task<ActionResponse<IEnumerable<StockCommercialProduct>>> GetAsync(PaginationDTO pagination);
         Task<ActionResponse<StockCommercialProduct>> UpdateAsync(StockCommercialProduct entity);
+        Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
     }
 }

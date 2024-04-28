@@ -14,5 +14,6 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
         Task<ActionResponse<int>> GetRecipesTotalPagesAsync(PaginationDTO pagination);
 
 
+        Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
     }
 }

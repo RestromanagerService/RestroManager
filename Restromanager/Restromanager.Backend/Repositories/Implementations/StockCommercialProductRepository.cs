@@ -57,12 +57,39 @@ namespace Restromanager.Backend.Repositories.Implementations
                 .ThenInclude(c => c.Category)
                 .Include(srm => srm.Units)
                 .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Product!.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
             return new ActionResponse<IEnumerable<StockCommercialProduct>>
             {
                 WasSuccess = true,
                 Result = await queryable.Paginate(pagination).ToListAsync()
             };
         }
+
+        public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
+        {
+            var queryable = _dataContext.StockCommercialProducts.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Product!.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            double count = await queryable.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / pagination.RecordsNumber);
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = totalPages
+            };
+
+
+        }
+
         public override async Task<ActionResponse<StockCommercialProduct>> UpdateAsync(StockCommercialProduct entity)
         {
             
@@ -105,4 +132,5 @@ namespace Restromanager.Backend.Repositories.Implementations
             };
         }
     }
+
 }
