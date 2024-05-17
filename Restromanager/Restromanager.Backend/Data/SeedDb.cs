@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
 using Restromanager.Backend.Data;
 using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Domain.Entities.Measures;
+using Restromanager.Backend.Enums;
+using Restromanager.Backend.UnitsOfWork.interfaces;
 
 namespace Orders.Backend.Data
 {
-    public class SeedDb
+    public class SeedDb(DataContext context, IUserUnitOfWork userUnitOfWork)
     {
-        private readonly DataContext _context;
+        private readonly IUserUnitOfWork _userUnitOfWork = userUnitOfWork;
+        private readonly DataContext _context = context;
+
         private readonly Dictionary<string, Unit> _units = [];
         private readonly Dictionary<string, RawMaterial> _rawMaterials = [];
         private readonly Dictionary<string, Food> _foods = [];
@@ -17,15 +21,11 @@ namespace Orders.Backend.Data
         private readonly Dictionary<string, TypeIncome> _typeIncomes = [];
         private readonly List<Income> _incomes = new List<Income>();
         private readonly Dictionary<string, Report> _reports = [];
-
-        public SeedDb(DataContext context)
-        {
-            _context = context;
-        }
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            await CheckCountriesAsync();
+            //await CheckCountriesAsync();
+            await CheckCountriesFullAsync();
             await CheckCategoriesAsync();
             CreateDataUnits();
             await CheckUnitsAsync();
@@ -42,12 +42,64 @@ namespace Orders.Backend.Data
             await CheckExpensesAsync();
             CreateDataTypeIncomes();
             await CheckTypeIncomeAsync();
-            await CheckIncomeAsync();            await CheckReportsAsync();
+            await CheckIncomeAsync();
+            await CheckReportsAsync();
+            await CheckRolesAsync();
+            await CheckUserAsync("1010", "Andrés", "Peñaloza", "sebbppe@yopmail.com", "3161249203", "Calle 12", "Cúcuta", UserType.Admin);
+            await CheckUserAsync("1011", "Oskar", "Guzmán", "oskar@yopmail.com", "3121421312", "Calle 13", "Cúcuta", UserType.Admin);
+            await CheckUserAsync("1011", "Andrés", "Serrano", "andres@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Admin);
+            await CheckUserAsync("1011", "homero", "simpson", "homero@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Chef);
+            await CheckUserAsync("1011", "Goku", "Peñaloza", "goku@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Waiter);
+            await CheckUserAsync("1011", "Ana", "Rendón", "ana@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.User);
             //await CheckTypesReportsAsync();
             //await CheckUserReportAsync();
 
         }
+        private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, string userCity, UserType userType)
+        {
+            var user = await _userUnitOfWork.GetUserAsync(email);
+            if (user == null)
+            {
+                var city = await _context.Cities.FirstOrDefaultAsync(x => x.Name == userCity);
+                city ??= await _context.Cities.FirstOrDefaultAsync();
 
+                user = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+                    PhoneNumber = phone,
+                    Address = address,
+                    Document = document,
+                    City = city,
+                    UserType = userType
+                };
+                await _userUnitOfWork.AddUserAsync(user, "123456");
+                await _userUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
+                var token = await _userUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
+                await _userUnitOfWork.ConfirmEmailAsync(user, token);
+
+            }
+            return user;
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            await _userUnitOfWork.CheckRoleAsync(UserType.Admin.ToString());
+            await _userUnitOfWork.CheckRoleAsync(UserType.Chef.ToString());
+            await _userUnitOfWork.CheckRoleAsync(UserType.Waiter.ToString());
+            await _userUnitOfWork.CheckRoleAsync(UserType.User.ToString());
+        }
+        private async Task CheckCountriesFullAsync()
+        {
+            if (!_context.Countries.Any())
+            {
+                var countriesStatesCitiesSQLScript = File.ReadAllText("Data\\CountriesStatesCities.sql");
+                await _context.Database.ExecuteSqlRawAsync(countriesStatesCitiesSQLScript);
+            }
+
+        }
 
         private async Task CheckReportsAsync()
         {
@@ -183,7 +235,8 @@ namespace Orders.Backend.Data
             });
 
             _expenses.Add(new Expense
-            {   Description= "Pago de de fiesta del jefe",
+            {
+                Description = "Pago de de fiesta del jefe",
                 Amount = 2000m,
                 TypeExpenseId = _typeExpenses["Gastos variables"].Id,
             });
@@ -272,6 +325,7 @@ namespace Orders.Backend.Data
             _products.Add("BandejaPaisa", new Product
             {
                 Name = "Bandeja paisa",
+                ProductType = ProductType.Recipe,
                 ProductFoods = [
                     new ProductFood{ Food = _foods["ArrozCocido"],Units=_units
                         ["Unidad"],Amount=1.0},
@@ -281,9 +335,9 @@ namespace Orders.Backend.Data
                         ["Unidad"],Amount=1.0}
                 ]
             });
-            _products.Add("GaseosaManzana300ml", new Product { Name = "Gaseosa de manzana 300ml" });
-            _products.Add("GaseosaMandarina300ml", new Product { Name = "Gaseosa de mandarina 300ml" });
-            _products.Add("GaseosaUva300ml", new Product { Name = "Gaseosa de uva 300ml" });
+            _products.Add("GaseosaManzana300ml", new Product { Name = "Gaseosa de manzana 300ml", ProductType = ProductType.Commercial });
+            _products.Add("GaseosaMandarina300ml", new Product { Name = "Gaseosa de mandarina 300ml", ProductType = ProductType.Commercial });
+            _products.Add("GaseosaUva300ml", new Product { Name = "Gaseosa de uva 300ml", ProductType = ProductType.Commercial });
         }
 
         private async Task CheckProductsAsync()
@@ -328,7 +382,8 @@ namespace Orders.Backend.Data
         }
         private async Task CheckCountriesAsync()
         {
-            if(!_context.Countries.Any()) {
+            if (!_context.Countries.Any())
+            {
                 _context.Countries.Add(
                     new Country
                     {

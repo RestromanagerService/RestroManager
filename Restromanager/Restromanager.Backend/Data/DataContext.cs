@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Domain.Entities.Measures;
 
 namespace Restromanager.Backend.Data
 {
-    public class DataContext:DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -13,7 +14,7 @@ namespace Restromanager.Backend.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<State> States { get; set; }
-        public DbSet<Food> Foods { get; set;}
+        public DbSet<Food> Foods { get; set; }
         public DbSet<FoodRawMaterial> FoodRawMaterials { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -62,11 +63,12 @@ namespace Restromanager.Backend.Data
                 .WithOne(i => i.TypeIncome)
                 .HasForeignKey(i => i.TypeIncomeId);
             modelBuilder.Entity<Report>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<Report>().Property(r => r.LabelValue).HasPrecision(18, 2);
             modelBuilder.Entity<TypeReport>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<UserReport>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<ProductCategory>().HasIndex(x => new { x.ProductId, x.CategoryId }).IsUnique();
             modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => new { x.FoodId, x.RawMaterialId }).IsUnique();
-            modelBuilder.Entity <ProductFood>().HasIndex(x => new { x.ProductId,x.FoodId}).IsUnique();
+            modelBuilder.Entity<ProductFood>().HasIndex(x => new { x.ProductId, x.FoodId }).IsUnique();
             DisableCascadingDelete(modelBuilder);
         }
 
