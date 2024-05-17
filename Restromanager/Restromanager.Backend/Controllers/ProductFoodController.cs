@@ -1,71 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Restromanager.Backend.Domain.Entities;
-using Restromanager.Backend.DTOs;
-using Restromanager.Backend.UnitsOfWork.implementations;
+using Restromanager.Backend.Helpers;
 using Restromanager.Backend.UnitsOfWork.interfaces;
 
 namespace Restromanager.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController(IGenericUnitOfWork<Product> unitOfWork, IProductUnitOfWork productUnitOfWork) : GenericController<Product>(unitOfWork)
+    public class ProductFoodController(IGenericUnitOfWork<ProductFood> unitOfWork, IProductFoodUnitOfWork productFoodUnitOfWork, IFileStorage fileStorage) : GenericController<ProductFood>(unitOfWork)
     {
-        private readonly IProductUnitOfWork _unitOfWork = productUnitOfWork;
+        private readonly IProductFoodUnitOfWork _productFoodUnitOfWork = productFoodUnitOfWork;
+        private readonly IGenericUnitOfWork<ProductFood> _unitOfWork = unitOfWork;
+        private readonly IFileStorage _fileStorage = fileStorage;
+        private readonly string _container = "foods";
 
-        [HttpGet("full")]
-        public override async Task<IActionResult> GetAsync()
+        [HttpPut]
+        public override async Task<IActionResult> PutAsync(ProductFood model)
         {
-            var action = await _unitOfWork.GetAsync();
+            if (!string.IsNullOrEmpty(model.Food?.Photo))
+            {
+                if (!model.Food.Photo.Contains(_container))
+                {
+                    var photoFood = Convert.FromBase64String(model.Food.Photo!);
+                    model.Food.Photo = await _fileStorage.SaveFileAsync(photoFood, ".jpg", _container);
+                }
+            }
+            var action = await _unitOfWork.UpdateAsync(model);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
             }
             return BadRequest();
         }
-        [HttpGet]
-        public override async Task<IActionResult> GetAsync(PaginationDTO pagination)
+        [HttpPost]
+        public override async Task<IActionResult> PostAsync(ProductFood model)
         {
-            var action = await _unitOfWork.GetAsync(pagination);
+            if (!string.IsNullOrEmpty(model.Food?.Photo))
+            {
+                var photoFood = Convert.FromBase64String(model.Food.Photo!);
+                model.Food.Photo = await _fileStorage.SaveFileAsync(photoFood, ".jpg", _container);
+            }
+            var action = await _unitOfWork.AddAsync(model);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
             }
-            return BadRequest();
+            return BadRequest(action.Message);
         }
-        [HttpGet("recipes")]
-        public async Task<IActionResult> GetRecipesAsync([FromQuery] PaginationDTO pagination)
-        {
-            var action = await _unitOfWork.GetRecipesAsync(pagination);
-            if (action.WasSuccess)
-            {
-                return Ok(action.Result);
-            }
-            return BadRequest();
-        }
-        [HttpGet("recipes/totalpages")]
-        public async Task<IActionResult> GetRecipesTotalPagesAsync([FromQuery] PaginationDTO pagination)
-        {
-            var action = await _unitOfWork.GetRecipesTotalPagesAsync(pagination);
-            if (action.WasSuccess)
-            {
-                return Ok(action.Result);
-            }
-            return BadRequest();
-        }
-        [HttpGet("recipes/full")]
-        public async Task<IActionResult> GetRecipesAsync()
-        {
-            var action = await _unitOfWork.GetRecipesAsync();
-            if (action.WasSuccess)
-            {
-                return Ok(action.Result);
-            }
-            return BadRequest();
-        }
+
         [HttpGet("{id}")]
         public override async Task<IActionResult> GetAsync(int id)
         {
-            var action = await _unitOfWork.GetAsync(id);
+            var action = await _productFoodUnitOfWork.GetAsync(id);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);
@@ -73,15 +59,7 @@ namespace Restromanager.Backend.Controllers
             return BadRequest();
         }
 
-        [HttpGet("totalPages")]
-        public override async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
-        {
-            var action = await _unitOfWork.GetTotalPagesAsync(pagination);
-            if (action.WasSuccess)
-            {
-                return Ok(action.Result);
-            }
-            return BadRequest();
-        }
+
+
     }
 }

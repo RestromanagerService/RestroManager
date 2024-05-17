@@ -8,7 +8,7 @@ namespace Restromanager.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController(IGenericUnitOfWork<Product> unitOfWork,IProductUnitOfWork productUnitOfWork) : GenericController<Product>(unitOfWork)
+    public class ProductsController(IGenericUnitOfWork<Product> unitOfWork, IProductUnitOfWork productUnitOfWork) : GenericController<Product>(unitOfWork)
     {
         private readonly IProductUnitOfWork _unitOfWork = productUnitOfWork;
 
