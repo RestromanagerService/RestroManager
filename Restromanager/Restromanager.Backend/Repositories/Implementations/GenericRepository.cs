@@ -24,25 +24,40 @@ namespace Restromanager.Backend.Repositories.Implementations
             try
             {
                 await _dataContext.SaveChangesAsync();
-                return new ActionResponse<T> {
+                return new ActionResponse<T>
+                {
                     WasSuccess = true,
                     Result = entity
                 };
-            }catch (DbUpdateException)
-            {
-                return DbUpdateExceptionActionResponse();
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                return ExceptionActionResponse(ex);
+                if (ex.InnerException != null)
+                {
+                    if (ex.InnerException!.Message.Contains("duplicate"))
+                    {
+                        return DbUpdateExceptionActionResponse();
+                    }
+                }
+                return new ActionResponse<T>
+                {
+                    WasSuccess = false,
+                    Message = ex.Message
+                };
+
+            }
+            catch (Exception exception)
+            {
+                return ExceptionActionResponse(exception);
             }
 
         }
 
         public virtual async Task<ActionResponse<T>> DeleteAsync(int id)
         {
-            var row= await _entity.FindAsync(id);
-            if(row==null) {
+            var row = await _entity.FindAsync(id);
+            if (row == null)
+            {
                 return new ActionResponse<T>
                 {
                     WasSuccess = false,
@@ -68,7 +83,7 @@ namespace Restromanager.Backend.Repositories.Implementations
         public virtual async Task<ActionResponse<T>> GetAsync(int id)
         {
             var row = await _entity.FindAsync(id);
-            if(row==null)
+            if (row == null)
             {
                 return new ActionResponse<T>
                 {
@@ -128,13 +143,24 @@ namespace Restromanager.Backend.Repositories.Implementations
                     Result = entity
                 };
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                return DbUpdateExceptionActionResponse();
+                if (ex.InnerException != null)
+                {
+                    if (ex.InnerException!.Message.Contains("duplicate"))
+                    {
+                        return DbUpdateExceptionActionResponse();
+                    }
+                }
+                return new ActionResponse<T>
+                {
+                    WasSuccess = false,
+                    Message = ex.Message
+                };
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return ExceptionActionResponse(ex);
+                return ExceptionActionResponse(exception);
             }
         }
 

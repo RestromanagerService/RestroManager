@@ -8,13 +8,12 @@ using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.Repositories.Implementations
 {
-    public class CitiesRepository(DataContext dataContext) : GenericRepository<City>(dataContext), ICitiesRepository
+    public class FoodsRepository(DataContext dataContext) : GenericRepository<Food>(dataContext), IFoodsRepository
     {
-        private readonly DataContext _context = dataContext;
-        public override async Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination)
+        private readonly DataContext _context=dataContext;
+        public override async Task<ActionResponse<IEnumerable<Food>>> GetAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Cities
-                .Where(c => c.StateId == pagination.Id)
+            var queryable = _context.Foods
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
@@ -23,7 +22,7 @@ namespace Restromanager.Backend.Repositories.Implementations
             }
 
 
-            return new ActionResponse<IEnumerable<City>>
+            return new ActionResponse<IEnumerable<Food>>
             {
                 WasSuccess = true,
                 Result = await queryable
@@ -34,8 +33,7 @@ namespace Restromanager.Backend.Repositories.Implementations
         }
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Cities
-                .Where(c => c.StateId == pagination.Id)
+            var queryable = _context.Foods
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
@@ -51,17 +49,28 @@ namespace Restromanager.Backend.Repositories.Implementations
                 Result = totalPages
             };
         }
-        public async Task<ActionResponse<IEnumerable<City>>> GetComboAsync(int stateId)
+        public override async Task<ActionResponse<Food>> GetAsync(int id)
         {
-            var cities = await _context.Cities
-                .Where(c => c.StateId == stateId)
-                .OrderBy(c => c.Name).ToListAsync();
-            return new ActionResponse<IEnumerable<City>>
+            var food = await _context.Foods
+                .Include(f => f.FoodRawMaterials!)
+                .ThenInclude(fr => fr.RawMaterial)
+                .Include(f => f.FoodRawMaterials!)
+                .ThenInclude(fr => fr.Units)
+                .FirstOrDefaultAsync(f => f.Id == id);
+            if (food == null)
+            {
+                return new ActionResponse<Food>
+                {
+                    WasSuccess = false,
+                    Message = "Alimento no existe"
+                };
+            }
+            return new ActionResponse<Food>
             {
                 WasSuccess = true,
-                Result = cities
+                Result = food
             };
-        }
 
+        }
     }
 }

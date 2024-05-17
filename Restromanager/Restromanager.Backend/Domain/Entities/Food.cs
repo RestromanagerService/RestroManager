@@ -14,6 +14,8 @@ namespace Restromanager.Backend.Domain.Entities
         [Display(Name = "Materias primas")]
         public int FoodRawMaterialsNumber => FoodRawMaterials == null ? 0 : FoodRawMaterials.Count;
 
+        public string? Photo { get; set; }
+
         public double ProductionCost { get; set; }
     }
 }
