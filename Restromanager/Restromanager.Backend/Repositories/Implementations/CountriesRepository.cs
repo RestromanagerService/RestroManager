@@ -20,9 +20,10 @@ namespace Restromanager.Backend.Repositories.Implementations
         public override async Task<ActionResponse<Country>> GetAsync(int id)
         {
             var country = await _context.Countries
-                .Include(c=>c.States!)
-                .ThenInclude(c=>c.Cities).FirstOrDefaultAsync(c=>c.Id==id);
-            if (country == null) {
+                .Include(c => c.States!)
+                .ThenInclude(c => c.Cities).FirstOrDefaultAsync(c => c.Id == id);
+            if (country == null)
+            {
                 return new ActionResponse<Country>
                 {
                     WasSuccess = false,
@@ -32,14 +33,14 @@ namespace Restromanager.Backend.Repositories.Implementations
             return new ActionResponse<Country>
             {
                 WasSuccess = true,
-                Result =country
+                Result = country
             };
 
         }
 
         public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync()
         {
-            var countries= await _context.Countries.Include(c=>c.States).ToListAsync();
+            var countries = await _context.Countries.Include(c => c.States).ToListAsync();
             return new ActionResponse<IEnumerable<Country>>
             {
                 WasSuccess = true,
@@ -49,7 +50,7 @@ namespace Restromanager.Backend.Repositories.Implementations
 
         public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination)
         {
-            var queryable = _context.Countries.Include(c=>c.States).AsQueryable();
+            var queryable = _context.Countries.Include(c => c.States).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
@@ -60,9 +61,19 @@ namespace Restromanager.Backend.Repositories.Implementations
             {
                 WasSuccess = true,
                 Result = await queryable
-                .OrderBy(c=>c.Name)
+                .OrderBy(c => c.Name)
                 .Paginate(pagination)
                 .ToListAsync()
+            };
+        }
+
+        public async Task<ActionResponse<IEnumerable<Country>>> GetComboAsync()
+        {
+            var countries = await _context.Countries.OrderBy(c => c.Name).ToListAsync();
+            return new ActionResponse<IEnumerable<Country>>
+            {
+                WasSuccess = true,
+                Result = countries
             };
         }
 

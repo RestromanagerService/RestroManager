@@ -38,6 +38,16 @@ namespace Restromanager.Backend.Repositories.Implementations
             };
         }
 
+        public async Task<ActionResponse<IEnumerable<Category>>> GetComboAsync()
+        {
+            var categories = await _context.Categories.OrderBy(c => c.Name).ToListAsync();
+            return new ActionResponse<IEnumerable<Category>>
+            {
+                WasSuccess = true,
+                Result = categories
+            };
+        }
+
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         {
             var queryable = _context.Categories.AsQueryable();
