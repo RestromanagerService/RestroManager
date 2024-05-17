@@ -57,7 +57,7 @@ namespace Restromanager.Backend.Controllers
             {
                 return Ok(action.Result);
             }
-            return BadRequest();
+            return BadRequest(action.Message);
         }
         [HttpPut]
         public virtual async Task<IActionResult> PutAsync(T model)
@@ -67,7 +67,7 @@ namespace Restromanager.Backend.Controllers
             {
                 return Ok(action.Result);
             }
-            return BadRequest();
+            return BadRequest(action.Message);
         }
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> DeleteAsync(int id)

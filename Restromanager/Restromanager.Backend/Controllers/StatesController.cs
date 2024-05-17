@@ -9,7 +9,7 @@ namespace Restromanager.Backend.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class StatesController(IGenericUnitOfWork<State> unitOfWork, IStatesUnitOfWork statesUnitOfWork) : GenericController<State>(unitOfWork)
-    { 
+    {
         private readonly IStatesUnitOfWork _statesUnitOfWork = statesUnitOfWork;
 
         [HttpGet("full")]
@@ -47,6 +47,16 @@ namespace Restromanager.Backend.Controllers
         public override async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
         {
             var action = await _statesUnitOfWork.GetTotalPagesAsync(pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+        [HttpGet("combo/{countryId:int}")]
+        public async Task<IActionResult> GetComboAsync(int countryId)
+        {
+            var action = await _statesUnitOfWork.GetComboAsync(countryId);
             if (action.WasSuccess)
             {
                 return Ok(action.Result);

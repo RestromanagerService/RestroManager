@@ -33,5 +33,15 @@ namespace Restromanager.Backend.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("combo/{stateId:int}")]
+        public async Task<IActionResult> GetComboAsync(int stateId)
+        {
+            var action = await _unitOfWork.GetComboAsync(stateId);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
     }
 }
