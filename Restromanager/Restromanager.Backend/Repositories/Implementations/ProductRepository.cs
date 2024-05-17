@@ -5,22 +5,23 @@ using Restromanager.Backend.DTOs;
 using Restromanager.Backend.Helpers;
 using Restromanager.Backend.Repositories.interfaces;
 using Restromanager.Backend.Responses;
+using System;
 
 namespace Restromanager.Backend.Repositories.Implementations
 {
-    public class ProductRepository(DataContext dataContext) :GenericRepository<Product>(dataContext),IProductRepository
+    public class ProductRepository(DataContext dataContext) : GenericRepository<Product>(dataContext), IProductRepository
     {
         private readonly DataContext _dataContext = dataContext;
 
         public override async Task<ActionResponse<Product>> GetAsync(int id)
         {
-            var product= await _dataContext.Products
-                .Include(p=>p.ProductFoods!)
-                .ThenInclude(pf=>pf.Food)
+            var product = await _dataContext.Products
+                .Include(p => p.ProductFoods!)
+                .ThenInclude(pf => pf.Food)
                 .Include(p => p.ProductFoods!)
                 .ThenInclude(pf => pf.Units)
-                .FirstOrDefaultAsync(p=>p.Id==id);
-            if(product == null)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
             {
                 return new ActionResponse<Product>
                 {
@@ -91,7 +92,7 @@ namespace Restromanager.Backend.Repositories.Implementations
             var products = await _dataContext.Products
                 .Include(p => p.ProductFoods!)
                 .ThenInclude(pf => pf.Food)
-                .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
+                .Where(p => p.ProductType == Enums.ProductType.Recipe)
                 .ToListAsync();
 
 
@@ -107,7 +108,7 @@ namespace Restromanager.Backend.Repositories.Implementations
             var queryable = _dataContext.Products
                 .Include(p => p.ProductFoods!)
                 .ThenInclude(pf => pf.Food)
-                .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
+                .Where(p => p.ProductType == Enums.ProductType.Recipe)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
@@ -126,7 +127,7 @@ namespace Restromanager.Backend.Repositories.Implementations
             var queryable = _dataContext.Products
                 .Include(p => p.ProductFoods!)
                 .ThenInclude(pf => pf.Food)
-                .Where(p => p.ProductFoods != null && p.ProductFoods.Count != 0)
+                .Where(p => p.ProductType == Enums.ProductType.Recipe)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))

@@ -13,6 +13,9 @@ namespace Restromanager.Backend.UnitsOfWork.implementations
 
         public override async Task<ActionResponse<IEnumerable<Category>>> GetAsync(PaginationDTO pagination) =>
             await _categoriesRepository.GetAsync(pagination);
+
+        public Task<ActionResponse<IEnumerable<Category>>> GetComboAsync() => _categoriesRepository.GetComboAsync();
+
         public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _categoriesRepository.GetTotalPagesAsync(pagination);
 
 

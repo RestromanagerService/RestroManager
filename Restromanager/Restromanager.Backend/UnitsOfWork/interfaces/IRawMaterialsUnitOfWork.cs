@@ -4,10 +4,9 @@ using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.UnitsOfWork.Interfaces
 {
-    public interface ICitiesUnitOfWork
+    public interface IRawMaterialsUnitOfWork
     {
-        Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination);
+        Task<ActionResponse<IEnumerable<RawMaterial>>> GetAsync(PaginationDTO pagination);
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
-        Task<ActionResponse<IEnumerable<City>>> GetComboAsync(int stateId);
     }
 }

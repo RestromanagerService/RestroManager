@@ -10,5 +10,6 @@ namespace Restromanager.Backend.Repositories.Interfaces
         Task<ActionResponse<IEnumerable<State>>> GetAsync();
         Task<ActionResponse<IEnumerable<State>>> GetAsync(PaginationDTO pagination);
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
+        Task<ActionResponse<IEnumerable<State>>> GetComboAsync(int countryId);
     }
 }
