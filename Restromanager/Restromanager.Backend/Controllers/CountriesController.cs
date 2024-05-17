@@ -55,5 +55,15 @@ namespace Restromanager.Backend.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("combo")]
+        public async Task<IActionResult> GetComboAsync()
+        {
+            var action = await _countriesUnitOfWork.GetComboAsync();
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
     }
 }
