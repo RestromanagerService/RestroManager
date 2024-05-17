@@ -4,10 +4,10 @@ using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.Repositories.Interfaces
 {
-    public interface ICitiesRepository
+    public interface IFoodsRepository
     {
-        Task<ActionResponse<IEnumerable<City>>> GetAsync(PaginationDTO pagination);
+        Task<ActionResponse<Food>> GetAsync(int id);
+        Task<ActionResponse<IEnumerable<Food>>> GetAsync(PaginationDTO pagination);
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
-        Task<ActionResponse<IEnumerable<City>>> GetComboAsync(int stateId);
     }
 }
