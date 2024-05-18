@@ -24,19 +24,8 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            //await CheckCountriesAsync();
             await CheckCountriesFullAsync();
-            await CheckCategoriesAsync();
-            CreateDataUnits();
-            await CheckUnitsAsync();
-            CreateDataRawMaterials();
-            await CheckRawMaterialsAsync();
-            CreateDataFoods();
-            await CheckFoodsAsync();
-            CreateDataProducts();
-            await CheckProductsAsync();
-            await CheckStockCommercialProductsAsync();
-            await CheckStockRawMaterialsAsync();
+            await CheckProductsSQL();
             CreateDataTypeExpenses();
             await CheckTypeExpenseAsync();
             await CheckExpensesAsync();
@@ -97,6 +86,15 @@ namespace Orders.Backend.Data
             {
                 var countriesStatesCitiesSQLScript = File.ReadAllText("Data\\CountriesStatesCities.sql");
                 await _context.Database.ExecuteSqlRawAsync(countriesStatesCitiesSQLScript);
+            }
+
+        }
+        private async Task CheckProductsSQL()
+        {
+            if (!_context.Products.Any())
+            {
+                var productsSQLScript = File.ReadAllText("Data\\DataProducts.sql");
+                await _context.Database.ExecuteSqlRawAsync(productsSQLScript);
             }
 
         }
