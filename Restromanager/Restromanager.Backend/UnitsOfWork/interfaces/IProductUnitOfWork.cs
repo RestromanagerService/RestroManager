@@ -15,5 +15,6 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
 
 
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
+        Task<ActionResponse<Product>> UpdateAsync(Product model);
     }
 }

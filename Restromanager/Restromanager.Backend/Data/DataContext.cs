@@ -69,6 +69,21 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<ProductCategory>().HasIndex(x => new { x.ProductId, x.CategoryId }).IsUnique();
             modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => new { x.FoodId, x.RawMaterialId }).IsUnique();
             modelBuilder.Entity<ProductFood>().HasIndex(x => new { x.ProductId, x.FoodId }).IsUnique();
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Product)
+                .WithMany(p => p.ProductCategories)
+                .HasForeignKey(pc => pc.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<FoodRawMaterial>()
+                .HasOne(frm => frm.Food)
+                .WithMany(f => f.FoodRawMaterials)
+                .HasForeignKey(frm => frm.FoodId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductFood>()
+                .HasOne(pf => pf.Product)
+                .WithMany(p => p.ProductFoods)
+                .HasForeignKey(pf => pf.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
             DisableCascadingDelete(modelBuilder);
         }
 
@@ -77,8 +92,12 @@ namespace Restromanager.Backend.Data
             var relationships = modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys());
             foreach (var relationship in relationships)
             {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-
+                if (!(relationship.DeclaringEntityType.ClrType.Name == "ProductCategory" ||
+                      relationship.DeclaringEntityType.ClrType.Name == "FoodRawMaterial" ||
+                      relationship.DeclaringEntityType.ClrType.Name == "ProductFood"))
+                {
+                    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                }
             }
         }
 

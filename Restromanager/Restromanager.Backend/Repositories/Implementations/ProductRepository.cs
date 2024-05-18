@@ -20,6 +20,8 @@ namespace Restromanager.Backend.Repositories.Implementations
                 .ThenInclude(pf => pf.Food)
                 .Include(p => p.ProductFoods!)
                 .ThenInclude(pf => pf.Units)
+                .Include(p=>p.ProductCategories!)
+                .ThenInclude(pc=>pc.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
@@ -141,6 +143,47 @@ namespace Restromanager.Backend.Repositories.Implementations
             {
                 WasSuccess = true,
                 Result = totalPages
+            };
+        }
+        public override async Task<ActionResponse<Product>> UpdateAsync(Product entity)
+        {
+
+
+            try
+            {
+                await _dataContext.ProductCategories.Where(p => p.ProductId == entity.Id).ExecuteDeleteAsync();
+                _dataContext.Update(entity);
+                await _dataContext.SaveChangesAsync();
+                return new ActionResponse<Product>
+                {
+                    WasSuccess = true,
+                    Result = entity
+                };
+            }
+            catch (DbUpdateException)
+            {
+                return DbUpdateExceptionActionResponse();
+            }
+            catch (Exception ex)
+            {
+                return ExceptionActionResponse(ex);
+            }
+        }
+        private ActionResponse<Product> ExceptionActionResponse(Exception exception)
+        {
+            return new ActionResponse<Product>
+            {
+                WasSuccess = false,
+                Message = exception.Message
+            };
+        }
+
+        private ActionResponse<Product> DbUpdateExceptionActionResponse()
+        {
+            return new ActionResponse<Product>
+            {
+                WasSuccess = false,
+                Message = "Ya existe el registro que estas intentando crear"
             };
         }
     }
