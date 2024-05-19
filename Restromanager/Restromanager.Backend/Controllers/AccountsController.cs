@@ -145,8 +145,8 @@ namespace Restromanager.Backend.Controllers
             var tokenLink = $"http://{_configuration["Url Frontend"]}/user/resetPassword?userid={user.Id}&token={myToken}";
 
             var response = _mailHelper.SendMail(user.FullName, user.Email!,
-                $"Orders - Recuperación de contraseña",
-                $"<h1>Orders - Recuperación de contraseña</h1>" +
+                $"Restromanager - Recuperación de contraseña",
+                $"<h1>Restromanager - Recuperación de contraseña</h1>" +
                 $"<p>Para recuperar su contraseña, por favor hacer clic 'Recuperar Contraseña':</p>" +
                 $"<b><a href ={tokenLink}>Recuperar Contraseña</a></b>");
 
