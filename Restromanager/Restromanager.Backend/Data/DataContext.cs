@@ -30,6 +30,12 @@ namespace Restromanager.Backend.Data
         public DbSet<Report> Reports { get; set; }
         public DbSet<TypeReport> TypesReport { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
+        public DbSet<FavoriteTaste> FavoriteTastes { get; set; }
+
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
 
 
@@ -59,7 +65,7 @@ namespace Restromanager.Backend.Data
                 .Property(e => e.Amount)
                 .HasPrecision(18, 2);
             modelBuilder.Entity<TypeIncome>()
-                .HasMany(ti => ti.Expenses)
+                .HasMany(ti => ti.Incomes)
                 .WithOne(i => i.TypeIncome)
                 .HasForeignKey(i => i.TypeIncomeId);
             modelBuilder.Entity<Report>().HasIndex(x => x.Name).IsUnique();
@@ -69,6 +75,9 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<ProductCategory>().HasIndex(x => new { x.ProductId, x.CategoryId }).IsUnique();
             modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => new { x.FoodId, x.RawMaterialId }).IsUnique();
             modelBuilder.Entity<ProductFood>().HasIndex(x => new { x.ProductId, x.FoodId }).IsUnique();
+            modelBuilder.Entity<FavoriteTaste>().HasIndex(x => new { x.UserID, x.ProductID }).IsUnique();
+            modelBuilder.Entity<Order>().HasIndex(o => o.Id);
+            modelBuilder.Entity<OrderDetail>().HasIndex(od => od.Id);
             modelBuilder.Entity<ProductCategory>()
                 .HasOne(pc => pc.Product)
                 .WithMany(p => p.ProductCategories)

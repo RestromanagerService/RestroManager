@@ -93,5 +93,27 @@ namespace Restromanager.Backend.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet("type/{id}")]
+        public async Task<IActionResult> GetProductsByType(int id, [FromQuery] PaginationDTO pagination)
+        {
+            var action = await _unitOfWork.GetProductsByType(id, pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest(action.Message);
+        }
+
+        [HttpGet("type/{id}/totalPages")]
+        public async Task<IActionResult> GetTotalProductsByType(int id, [FromQuery] PaginationDTO pagination)
+        {
+            var action = await _unitOfWork.GetTotalProductsByTypeAsync(id, pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest(action.Message);
+        }
     }
 }

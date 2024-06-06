@@ -12,9 +12,9 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
         Task<ActionResponse<IEnumerable<Product>>> GetRecipesAsync();
         Task<ActionResponse<IEnumerable<Product>>> GetRecipesAsync(PaginationDTO pagination);
         Task<ActionResponse<int>> GetRecipesTotalPagesAsync(PaginationDTO pagination);
-
-
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
         Task<ActionResponse<Product>> UpdateAsync(Product model);
+        Task<ActionResponse<IEnumerable<Product>>> GetProductsByType(int id, PaginationDTO paginationDTO);
+        Task<ActionResponse<int>> GetTotalProductsByTypeAsync(int id, PaginationDTO paginationDTO);
     }
 }

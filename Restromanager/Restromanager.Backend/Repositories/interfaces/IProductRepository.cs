@@ -1,5 +1,6 @@
 ﻿using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.DTOs;
+using Restromanager.Backend.Enums;
 using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.Repositories.interfaces
@@ -14,5 +15,7 @@ namespace Restromanager.Backend.Repositories.interfaces
         Task<ActionResponse<int>> GetRecipesTotalPagesAsync(PaginationDTO pagination);
         Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
         Task<ActionResponse<Product>> UpdateAsync(Product entity);
+        Task<ActionResponse<IEnumerable<Product>>> GetProductsByType(int id, PaginationDTO paginationDTO);
+        Task<ActionResponse<int>> GetTotalProductsByTypeAsync(int id, PaginationDTO paginationDTO);
     }
 }

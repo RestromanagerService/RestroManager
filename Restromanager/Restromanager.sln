@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restromanager.Backend", "Restromanager.Backend\Restromanager.Backend.csproj", "{EBB0506C-E8FA-47B3-B847-8D467C44777E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restromanager.Backend", "Restromanager.Backend\Restromanager.Backend.csproj", "{EBB0506C-E8FA-47B3-B847-8D467C44777E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restromanager.Tests", "Restromanager.Tests\Restromanager.Tests.csproj", "{F1DA22BF-41BC-4B0D-B5E0-5BEB606E2B6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EBB0506C-E8FA-47B3-B847-8D467C44777E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBB0506C-E8FA-47B3-B847-8D467C44777E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBB0506C-E8FA-47B3-B847-8D467C44777E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DA22BF-41BC-4B0D-B5E0-5BEB606E2B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DA22BF-41BC-4B0D-B5E0-5BEB606E2B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DA22BF-41BC-4B0D-B5E0-5BEB606E2B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DA22BF-41BC-4B0D-B5E0-5BEB606E2B6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

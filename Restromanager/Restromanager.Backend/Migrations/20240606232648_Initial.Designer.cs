@@ -12,7 +12,7 @@ using Restromanager.Backend.Data;
 namespace Restromanager.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240517033755_Initial")]
+    [Migration("20240606232648_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -250,6 +250,31 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("Expenses");
                 });
 
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.FavoriteTaste", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserID", "ProductID")
+                        .IsUnique();
+
+                    b.ToTable("FavoriteTastes");
+                });
+
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Food", b =>
                 {
                     b.Property<int>("Id")
@@ -360,6 +385,63 @@ namespace Restromanager.Backend.Migrations
                     b.ToTable("Units");
                 });
 
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.OrderDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -372,6 +454,10 @@ namespace Restromanager.Backend.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductType")
                         .HasColumnType("int");
@@ -854,24 +940,43 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("TypeExpense");
                 });
 
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.FavoriteTaste", b =>
+                {
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restromanager.Backend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.FoodRawMaterial", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.Food", "Food")
                         .WithMany("FoodRawMaterials")
                         .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.RawMaterial", "RawMaterial")
                         .WithMany()
                         .HasForeignKey("RawMaterialId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.Measures.Unit", "Units")
                         .WithMany()
                         .HasForeignKey("UnitsId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Food");
@@ -884,7 +989,7 @@ namespace Restromanager.Backend.Migrations
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Income", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.TypeIncome", "TypeIncome")
-                        .WithMany("Expenses")
+                        .WithMany("Incomes")
                         .HasForeignKey("TypeIncomeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -892,18 +997,47 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("TypeIncome");
                 });
 
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Restromanager.Backend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.OrderDetail", b =>
+                {
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.ProductCategory", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
                         .WithMany("ProductCategories")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -916,19 +1050,19 @@ namespace Restromanager.Backend.Migrations
                     b.HasOne("Restromanager.Backend.Domain.Entities.Food", "Food")
                         .WithMany()
                         .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
                         .WithMany("ProductFoods")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Restromanager.Backend.Domain.Entities.Measures.Unit", "Units")
                         .WithMany()
                         .HasForeignKey("UnitsId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Food");
@@ -1027,6 +1161,11 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("FoodRawMaterials");
                 });
 
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Product", b =>
                 {
                     b.Navigation("ProductCategories");
@@ -1046,7 +1185,7 @@ namespace Restromanager.Backend.Migrations
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeIncome", b =>
                 {
-                    b.Navigation("Expenses");
+                    b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618
         }

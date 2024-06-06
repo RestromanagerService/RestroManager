@@ -24,6 +24,7 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
+            //await CheckCountriesAsync();
             await CheckCountriesFullAsync();
             await CheckProductsSQL();
             CreateDataTypeExpenses();
@@ -98,7 +99,6 @@ namespace Orders.Backend.Data
             }
 
         }
-
         private async Task CheckReportsAsync()
         {
             if (!_context.Reports.Any())
@@ -331,11 +331,14 @@ namespace Orders.Backend.Data
                         ["Unidad"],Amount=1.0},
                     new ProductFood{ Food = _foods["Chicharron"],Units=_units
                         ["Unidad"],Amount=1.0}
-                ]
+                ],
+                Photo = ""
             });
-            _products.Add("GaseosaManzana300ml", new Product { Name = "Gaseosa de manzana 300ml", ProductType = ProductType.Commercial });
-            _products.Add("GaseosaMandarina300ml", new Product { Name = "Gaseosa de mandarina 300ml", ProductType = ProductType.Commercial });
-            _products.Add("GaseosaUva300ml", new Product { Name = "Gaseosa de uva 300ml", ProductType = ProductType.Commercial });
+            _products.Add("GaseosaManzana300ml", new Product { Name = "Gaseosa de manzana 300ml", ProductType = ProductType.Commercial, Photo = "" });
+            _products.Add("GaseosaMandarina300ml", new Product { Name = "Gaseosa de mandarina 300ml", ProductType = ProductType.Commercial, Photo = "" });
+            _products.Add("GaseosaUva300ml", new Product { Name = "Gaseosa de uva 300ml", ProductType = ProductType.Commercial, Photo = "" });
+            _products.Add("LimonadaCerezada", new Product { Name = "Limonada Cerezada", ProductType = ProductType.Commercial, Photo = "" });
+            _products.Add("LimonadaNatural", new Product { Name = "Limonada Natural", ProductType = ProductType.Commercial, Photo = "" });
         }
 
         private async Task CheckProductsAsync()
@@ -353,6 +356,9 @@ namespace Orders.Backend.Data
                 _context.StockCommercialProducts.Add(new StockCommercialProduct { Product = _products["GaseosaManzana300ml"], Units = _units["Unidad"], Aumount = 10, UnitCost = 3000.5 });
                 _context.StockCommercialProducts.Add(new StockCommercialProduct { Product = _products["GaseosaMandarina300ml"], Units = _units["Unidad"], Aumount = 10, UnitCost = 3000.5 });
                 _context.StockCommercialProducts.Add(new StockCommercialProduct { Product = _products["GaseosaUva300ml"], Units = _units["Unidad"], Aumount = 10, UnitCost = 3000.5 });
+                _context.StockCommercialProducts.Add(new StockCommercialProduct { Product = _products["LimonadaCerezada"], Units = _units["Unidad"], Aumount = 10, UnitCost = 3000.5 });
+                _context.StockCommercialProducts.Add(new StockCommercialProduct { Product = _products["LimonadaNatural"], Units = _units["Unidad"], Aumount = 10, UnitCost = 3000.5 });
+
                 await _context.SaveChangesAsync();
             }
         }

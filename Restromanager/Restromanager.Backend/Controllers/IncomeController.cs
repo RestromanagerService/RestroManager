@@ -6,7 +6,7 @@ namespace Restromanager.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class IncomeController(IGenericUnitOfWork<TypeExpense> unitOfWork) : GenericController<TypeExpense>(unitOfWork)
+    public class IncomeController(IGenericUnitOfWork<Income> unitOfWork) : GenericController<Income>(unitOfWork)
     {
     }
 }
