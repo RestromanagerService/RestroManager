@@ -12,8 +12,8 @@ using Restromanager.Backend.Data;
 namespace Restromanager.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240606232648_Initial")]
-    partial class Initial
+    [Migration("20240607213326_userId")]
+    partial class userId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -450,6 +450,10 @@ namespace Restromanager.Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -458,6 +462,9 @@ namespace Restromanager.Backend.Migrations
                     b.Property<string>("Photo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductType")
                         .HasColumnType("int");
@@ -685,6 +692,58 @@ namespace Restromanager.Backend.Migrations
                     b.HasIndex("UnitsId");
 
                     b.ToTable("StockRawMaterials");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.Table", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tables");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TemporalOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<int>("TableId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TableId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TemporalOrders");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeExpense", b =>
@@ -1140,6 +1199,33 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("Units");
                 });
 
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TemporalOrder", b =>
+                {
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Product", "Product")
+                        .WithMany("TemporalOrders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restromanager.Backend.Domain.Entities.Table", "Table")
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restromanager.Backend.Domain.Entities.User", "User")
+                        .WithMany("TemporalOrders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Table");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.User", b =>
                 {
                     b.HasOne("Restromanager.Backend.Domain.Entities.City", "City")
@@ -1171,6 +1257,8 @@ namespace Restromanager.Backend.Migrations
                     b.Navigation("ProductCategories");
 
                     b.Navigation("ProductFoods");
+
+                    b.Navigation("TemporalOrders");
                 });
 
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.State", b =>
@@ -1186,6 +1274,11 @@ namespace Restromanager.Backend.Migrations
             modelBuilder.Entity("Restromanager.Backend.Domain.Entities.TypeIncome", b =>
                 {
                     b.Navigation("Incomes");
+                });
+
+            modelBuilder.Entity("Restromanager.Backend.Domain.Entities.User", b =>
+                {
+                    b.Navigation("TemporalOrders");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Restromanager.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,9 +73,11 @@ namespace Restromanager.Backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductType = table.Column<int>(type: "int", nullable: false),
                     ProductionCost = table.Column<double>(type: "float", nullable: false),
-                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,6 +96,19 @@ namespace Restromanager.Backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RawMaterials", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tables",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tables", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -618,6 +633,40 @@ namespace Restromanager.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TemporalOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TableId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TemporalOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TemporalOrders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TemporalOrders_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TemporalOrders_Tables_TableId",
+                        column: x => x.TableId,
+                        principalTable: "Tables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderDetails",
                 columns: table => new
                 {
@@ -857,6 +906,27 @@ namespace Restromanager.Backend.Migrations
                 column: "UnitsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tables_Name",
+                table: "Tables",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TemporalOrders_ProductId",
+                table: "TemporalOrders",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TemporalOrders_TableId",
+                table: "TemporalOrders",
+                column: "TableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TemporalOrders_UserId",
+                table: "TemporalOrders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TypeExpenses_Name",
                 table: "TypeExpenses",
                 column: "Name",
@@ -936,6 +1006,9 @@ namespace Restromanager.Backend.Migrations
                 name: "StockRawMaterials");
 
             migrationBuilder.DropTable(
+                name: "TemporalOrders");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -960,13 +1033,16 @@ namespace Restromanager.Backend.Migrations
                 name: "UserReports");
 
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "RawMaterials");
 
             migrationBuilder.DropTable(
                 name: "Units");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Tables");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

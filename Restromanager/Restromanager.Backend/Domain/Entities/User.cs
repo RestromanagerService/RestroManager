@@ -40,5 +40,6 @@ namespace Restromanager.Backend.Domain.Entities
 
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
+        public ICollection<TemporalOrder>? TemporalOrders { get; set; }
     }
 }

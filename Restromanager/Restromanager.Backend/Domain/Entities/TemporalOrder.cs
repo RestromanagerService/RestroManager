@@ -1,14 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Restromanager.Backend.Domain.Entities
 {
-    public class OrderDetail
-
+    public class TemporalOrder
     {
         public int Id { get; set; }
-        public Order? Order { get; set; }
-        public int OrderId { get; set; }
+
+        public User? User { get; set; }
+
+        public string UserId { get; set; }
+        public Table? Table { get; set; }
+
+        public int TableId { get; set; }
+
         public Product? Product { get; set; }
         public int ProductId { get; set; }
 
@@ -16,10 +20,7 @@ namespace Restromanager.Backend.Domain.Entities
         [Display(Name = "Cantidad")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public float Quantity { get; set; }
+        public decimal Value => Product == null ? 0 : Product.Price * (decimal)Quantity;
 
-        [DisplayFormat(DataFormatString = "{0:C2}")]
-        [Column(TypeName = "decimal(18,2)")]
-        [Display(Name = "Valor")]
-        public decimal Value  { get; set; }
     }
 }

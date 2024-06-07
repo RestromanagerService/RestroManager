@@ -31,11 +31,12 @@ namespace Restromanager.Backend.Data
         public DbSet<TypeReport> TypesReport { get; set; }
         public DbSet<UserReport> UserReports { get; set; }
         public DbSet<FavoriteTaste> FavoriteTastes { get; set; }
-
+        public DbSet<TemporalOrder> TemporalOrders { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Table> Tables { get; set; }
 
 
 
@@ -76,6 +77,7 @@ namespace Restromanager.Backend.Data
             modelBuilder.Entity<FoodRawMaterial>().HasIndex(x => new { x.FoodId, x.RawMaterialId }).IsUnique();
             modelBuilder.Entity<ProductFood>().HasIndex(x => new { x.ProductId, x.FoodId }).IsUnique();
             modelBuilder.Entity<FavoriteTaste>().HasIndex(x => new { x.UserID, x.ProductID }).IsUnique();
+            modelBuilder.Entity<Table>().HasIndex(t => t.Name).IsUnique();
             modelBuilder.Entity<Order>().HasIndex(o => o.Id);
             modelBuilder.Entity<OrderDetail>().HasIndex(od => od.Id);
             modelBuilder.Entity<ProductCategory>()

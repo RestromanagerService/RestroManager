@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Restromanager.Backend.Domain.Entities
 {
@@ -29,6 +30,7 @@ namespace Restromanager.Backend.Domain.Entities
         [Required(ErrorMessage = "El campo {0} es requerido.")]
         public string ChartName { get; set; } = null!;
         public string LabelName { get; set; } = null!;
+        [Column(TypeName = "decimal(18,2)")]
         public decimal LabelValue { get; set; }
     }
 }

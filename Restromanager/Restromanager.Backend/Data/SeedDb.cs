@@ -20,12 +20,12 @@ namespace Orders.Backend.Data
         private readonly List<Expense> _expenses = new List<Expense>();
         private readonly Dictionary<string, TypeIncome> _typeIncomes = [];
         private readonly List<Income> _incomes = new List<Income>();
-        private readonly Dictionary<string, Report> _reports = [];
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
             //await CheckCountriesAsync();
             await CheckCountriesFullAsync();
+            await CheckTablesAsync();
             await CheckProductsSQL();
             CreateDataTypeExpenses();
             await CheckTypeExpenseAsync();
@@ -158,6 +158,19 @@ namespace Orders.Backend.Data
             {
                 _context.Units.Add(_units["Kilogramo"]);
                 _context.Units.Add(_units["Gramo"]);
+                await _context.SaveChangesAsync();
+            }
+        }
+        private async Task CheckTablesAsync()
+        {
+            if (!_context.Tables.Any())
+            {
+                _context.Tables.Add(new Table() { Name = "Mesa 1"});
+                _context.Tables.Add(new Table() { Name = "Mesa 2" });
+                _context.Tables.Add(new Table() { Name = "Mesa 3" });
+                _context.Tables.Add(new Table() { Name = "Mesa 4" });
+                _context.Tables.Add(new Table() { Name = "Mesa 5" });
+                _context.Tables.Add(new Table() { Name = "Mesa 6" });
                 await _context.SaveChangesAsync();
             }
         }

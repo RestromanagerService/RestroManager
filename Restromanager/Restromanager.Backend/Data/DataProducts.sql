@@ -66,11 +66,11 @@ INSERT INTO [dbo].[FoodRawMaterials] ([Id], [Amount], [UnitsId], [FoodId], [RawM
 SET IDENTITY_INSERT [dbo].[FoodRawMaterials] OFF
 
 SET IDENTITY_INSERT [dbo].[Products] ON
-INSERT INTO [dbo].[Products] ([Id], [Name], [ProductType], [ProductionCost], [Photo]) VALUES (1, N'Bandeja paisa', 1, 5000,'')
-INSERT INTO [dbo].[Products] ([Id], [Name], [ProductType], [ProductionCost], [Photo]) VALUES (2, N'Gaseosa de manzana 300ml', 0, 0,'')
-INSERT INTO [dbo].[Products] ([Id], [Name], [ProductType], [ProductionCost], [Photo]) VALUES (3, N'Gaseosa de mandarina 300ml', 0, 0,'')
-INSERT INTO [dbo].[Products] ([Id], [Name], [ProductType], [ProductionCost], [Photo]) VALUES (4, N'Gaseosa de uva 300ml', 0, 0,'')
-INSERT INTO [dbo].[Products] ([Id], [Name], [ProductType], [ProductionCost], [Photo]) VALUES (5, N'Sancocho Antioqueño', 1, 2000,'')
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (1, N'Bandeja paisa','Bandeja', 1, 5000,'',12000.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (2, N'Gaseosa de manzana 300ml','Gaseosa', 0, 0,'',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (3, N'Gaseosa de mandarina 300ml','Gaseosa', 0, 0,'',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (4, N'Gaseosa de uva 300ml','Gaseosa', 0, 0,'',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (5, N'Sancocho Antioqueño','Gaseosa', 1, 2000,'',1500.0)
 SET IDENTITY_INSERT [dbo].[Products] OFF
 
 SET IDENTITY_INSERT [dbo].[ProductFoods] ON

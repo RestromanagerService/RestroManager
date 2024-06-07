@@ -90,6 +90,8 @@ builder.Services.AddScoped<IFoodRawMaterialsUnitOfWork, FoodRawMateriaslsUnitOfW
 builder.Services.AddScoped<IFoodRawMaterialsRepository, FoodRawMaterialsRepository>();
 builder.Services.AddScoped<IRawMaterialsUnitOfWork, RawMaterialsUnitOfWork>();
 builder.Services.AddScoped<IRawMaterialsRepository, RawMaterialsRepository>();
+builder.Services.AddScoped<ITemporalOrdersUnitOfWork, TemporalOrdersUnitOfWork>();
+builder.Services.AddScoped<ITemporalOrdersRepository, TemporalOrdersRepository>();
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
 {
