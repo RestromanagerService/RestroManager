@@ -23,8 +23,8 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            //await CheckCountriesAsync();
-            await CheckCountriesFullAsync();
+            await CheckCountriesAsync();
+            //await CheckCountriesFullAsync();
             await CheckTablesAsync();
             await CheckProductsSQL();
             CreateDataTypeExpenses();
@@ -86,7 +86,7 @@ namespace Orders.Backend.Data
         {
             if (!_context.Countries.Any())
             {
-                var countriesStatesCitiesSQLScript = File.ReadAllText("Data\\CountriesStatesCities.sql");
+                var countriesStatesCitiesSQLScript = File.ReadAllText("Data\\OptimizedCountriesStatesCities.sql");
                 await _context.Database.ExecuteSqlRawAsync(countriesStatesCitiesSQLScript);
             }
 
@@ -421,6 +421,9 @@ namespace Orders.Backend.Data
                             new State{Name="Antioquia",Cities=[
                                 new City{Name="Medellín"},
                                 new City{Name="Envigado"}
+                            ] },
+                            new State{Name="Atlántico",Cities=[
+                                new City{Name="Barranquilla"}
                             ] }
                         ]
                     });
