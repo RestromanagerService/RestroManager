@@ -35,17 +35,17 @@ namespace Orders.Backend.Data
             await CheckIncomeAsync();
             await CheckReportsAsync();
             await CheckRolesAsync();
-            await CheckUserAsync("1010", "Andrés", "Peñaloza", "sebbppe@yopmail.com", "3161249203", "Calle 12", "Cúcuta", UserType.Admin);
-            await CheckUserAsync("1011", "Oskar", "Guzmán", "oskar@yopmail.com", "3121421312", "Calle 13", "Cúcuta", UserType.Admin);
-            await CheckUserAsync("1011", "Andrés", "Serrano", "andres@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Admin);
-            await CheckUserAsync("1011", "homero", "simpson", "homero@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Chef);
-            await CheckUserAsync("1011", "Goku", "Peñaloza", "goku@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Waiter);
-            await CheckUserAsync("1011", "Ana", "Rendón", "ana@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.User);
+            await CheckUserAsync("1010", "Andrés", "Peñaloza", "sebbppe@yopmail.com", "3161249203", "Calle 12", "Cúcuta", UserType.Admin, "https://orderssebas20241.blob.core.windows.net/users/d7fc526e-2ec4-4ae9-b41c-043851af1d2a.jpg");
+            await CheckUserAsync("1011", "Oskar", "Guzmán", "oskar@yopmail.com", "3121421312", "Calle 13", "Cúcuta", UserType.Admin, "https://orderssebas20241.blob.core.windows.net/users/cd691ce7-eff0-4e35-8934-489435b34828.jpg");
+            await CheckUserAsync("1011", "Andrés", "Serrano", "andres@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Admin, "https://orderssebas20241.blob.core.windows.net/users/5cd555ec-d29e-4d46-b871-077bd0a4e971.jpg");
+            await CheckUserAsync("1011", "homero", "simpson", "homero@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Chef, "https://orderssebas20241.blob.core.windows.net/users/68061a49-cd2f-45e5-bf3f-3d9d5a89ad57.jpg");
+            await CheckUserAsync("1011", "Goku", "Peñaloza", "goku@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.Waiter, "https://orderssebas20241.blob.core.windows.net/users/da60be1a-a00a-4b94-8f54-b0a50907fbfa.jpg");
+            await CheckUserAsync("1011", "Ana", "Rendón", "ana@yopmail.com", "3121421312", "Calle 14", "Barranquilla", UserType.User, "https://orderssebas20241.blob.core.windows.net/users/9dca68da-98a8-4d28-950e-84b4f5ffcfda.jpg");
             //await CheckTypesReportsAsync();
             //await CheckUserReportAsync();
 
         }
-        private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, string userCity, UserType userType)
+        private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, string userCity, UserType userType,string photo)
         {
             var user = await _userUnitOfWork.GetUserAsync(email);
             if (user == null)
@@ -63,7 +63,8 @@ namespace Orders.Backend.Data
                     Address = address,
                     Document = document,
                     City = city,
-                    UserType = userType
+                    UserType = userType,
+                    Photo= photo
                 };
                 await _userUnitOfWork.AddUserAsync(user, "123456");
                 await _userUnitOfWork.AddUserToRoleAsync(user, userType.ToString());

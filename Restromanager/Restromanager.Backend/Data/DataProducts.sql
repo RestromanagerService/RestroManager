@@ -66,11 +66,11 @@ INSERT INTO [dbo].[FoodRawMaterials] ([Id], [Amount], [UnitsId], [FoodId], [RawM
 SET IDENTITY_INSERT [dbo].[FoodRawMaterials] OFF
 
 SET IDENTITY_INSERT [dbo].[Products] ON
-INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (1, N'Bandeja paisa','Bandeja', 1, 5000,'',12000.0)
-INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (2, N'Gaseosa de manzana 300ml','Gaseosa', 0, 0,'',1500.0)
-INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (3, N'Gaseosa de mandarina 300ml','Gaseosa', 0, 0,'',1500.0)
-INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (4, N'Gaseosa de uva 300ml','Gaseosa', 0, 0,'',1500.0)
-INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (5, N'Sancocho Antioqueño','Gaseosa', 1, 2000,'',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (1, N'Bandeja paisa','Bandeja', 1, 5000,N'https://orderssebas20241.blob.core.windows.net/products/14f66b66-a193-42a6-bdc6-680f89ab6b80.jpg',12000.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (2, N'Gaseosa de manzana 300ml','Gaseosa', 0, 0,N'https://orderssebas20241.blob.core.windows.net/products/ca4c0528-7a02-493f-b30c-9d37a5f5b2f0.jpg',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (3, N'Gaseosa pepsi 300ml','Gaseosa', 0, 0,N'https://orderssebas20241.blob.core.windows.net/products/5c79cf5f-035c-464d-9f5e-664fdd3e1e11.jpg',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (4, N'Gaseosa de uva 300ml','Gaseosa', 0, 0,N'https://orderssebas20241.blob.core.windows.net/products/2f1bc175-9109-4570-818a-eddafda55ef8.jpg',1500.0)
+INSERT INTO [dbo].[Products] ([Id], [Name],[Description], [ProductType], [ProductionCost], [Photo],[Price]) VALUES (5, N'Sancocho Antioqueño','Gaseosa', 1, 2000,N'https://orderssebas20241.blob.core.windows.net/products/43a246bc-8fc1-400c-aaa5-21de49218851.jpg',1500.0)
 SET IDENTITY_INSERT [dbo].[Products] OFF
 
 SET IDENTITY_INSERT [dbo].[ProductFoods] ON
