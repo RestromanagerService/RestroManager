@@ -59,17 +59,7 @@ namespace Restrommanager.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(OrderDTO orderDTO)
         {
-            var orderDetails = new List<OrderDetail>();
-            foreach (var detailDTO in orderDTO.OrderDetails)
-            {
-                var orderDetail = new OrderDetail
-                {
-                    ProductId = detailDTO.ProductId,
-                    Quantity = detailDTO.Quantity
-                };
-                orderDetails.Add(orderDetail);
-            }
-            var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!,orderDTO.TableId, orderDetails);
+            var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!,orderDTO.TableId);
             if (response.WasSuccess)
             {
                 return NoContent();
@@ -77,8 +67,37 @@ namespace Restrommanager.Backend.Controllers
             return BadRequest(response.Message);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, OrderDTO orderDTO)
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutAsync(int id, OrderDTO orderDTO)
+        //{
+        //    var response = await _ordersUnitOfWork.GetAsync(id);
+        //    if (!response.WasSuccess)
+        //    {
+        //        return NotFound(response.Message);
+        //    }
+
+        //    var order = response.Result;
+        //    order.OrderStatus = orderDTO.OrderStatus;
+        //    order.OrderDetails.Clear();
+        //    foreach (var detailDTO in orderDTO.OrderDetails)
+        //    {
+        //        order.OrderDetails.Add(new OrderDetail
+        //        {
+        //            ProductId = detailDTO.ProductId,
+        //            Quantity = detailDTO.Quantity,
+        //        });
+        //    }
+
+        //    var updateResponse = await _ordersUnitOfWork.UpdateAsync(order);
+        //    if (updateResponse.WasSuccess)
+        //    {
+        //        return Ok(updateResponse.Result);
+        //    }
+        //    return BadRequest(updateResponse.Message);
+        //}
+
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> PatchStatusAsync(int id, [FromBody] OrderDTO orderDTO)
         {
             var response = await _ordersUnitOfWork.GetAsync(id);
             if (!response.WasSuccess)
@@ -88,35 +107,6 @@ namespace Restrommanager.Backend.Controllers
 
             var order = response.Result;
             order.OrderStatus = orderDTO.OrderStatus;
-            order.OrderDetails.Clear();
-            foreach (var detailDTO in orderDTO.OrderDetails)
-            {
-                order.OrderDetails.Add(new OrderDetail
-                {
-                    ProductId = detailDTO.ProductId,
-                    Quantity = detailDTO.Quantity,
-                });
-            }
-
-            var updateResponse = await _ordersUnitOfWork.UpdateAsync(order);
-            if (updateResponse.WasSuccess)
-            {
-                return Ok(updateResponse.Result);
-            }
-            return BadRequest(updateResponse.Message);
-        }
-
-        [HttpPatch("{id}/status")]
-        public async Task<IActionResult> PatchStatusAsync(int id, [FromBody] OrderStatus status)
-        {
-            var response = await _ordersUnitOfWork.GetAsync(id);
-            if (!response.WasSuccess)
-            {
-                return NotFound(response.Message);
-            }
-
-            var order = response.Result;
-            order.OrderStatus = status;
 
             var updateResponse = await _ordersUnitOfWork.UpdateAsync(order);
             if (updateResponse.WasSuccess)
