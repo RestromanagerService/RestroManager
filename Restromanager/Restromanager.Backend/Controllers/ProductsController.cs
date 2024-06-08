@@ -70,7 +70,7 @@ namespace Restromanager.Backend.Controllers
             {
                 return Ok(action.Result);
             }
-            return BadRequest();
+            return BadRequest(action.Message);
         }
 
         [HttpGet("totalPages")]

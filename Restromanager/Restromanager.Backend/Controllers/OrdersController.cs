@@ -10,7 +10,7 @@ using Restromanager.Backend.UnitsOfWork.interfaces;
 namespace Restrommanager.Backend.Controllers
 {
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {

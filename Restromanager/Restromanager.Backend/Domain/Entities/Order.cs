@@ -14,6 +14,8 @@ namespace Restromanager.Backend.Domain.Entities
         public User? User { get; set; }
 
         public string? UserId { get; set; }
+        public Table? Table { get; set; }
+        public int TableId { get; set; }
 
         public OrderStatus OrderStatus { get; set; }
         

@@ -92,6 +92,9 @@ builder.Services.AddScoped<IRawMaterialsUnitOfWork, RawMaterialsUnitOfWork>();
 builder.Services.AddScoped<IRawMaterialsRepository, RawMaterialsRepository>();
 builder.Services.AddScoped<ITemporalOrdersUnitOfWork, TemporalOrdersUnitOfWork>();
 builder.Services.AddScoped<ITemporalOrdersRepository, TemporalOrdersRepository>();
+builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
+builder.Services.AddScoped<IOrderUnitOfWork, OrdersUnitOfWork>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
 {
