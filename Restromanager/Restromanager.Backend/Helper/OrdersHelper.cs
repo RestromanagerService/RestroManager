@@ -1,4 +1,6 @@
-﻿using Restromanager.Backend.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Restromanager.Backend.Data;
+using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Enums;
 using Restromanager.Backend.Responses;
 using Restromanager.Backend.UnitsOfWork.interfaces;
@@ -10,17 +12,20 @@ namespace Restromanager.Backend.Helpers
         private readonly IUserUnitOfWork _usersUnitOfWork;
         private readonly IProductUnitOfWork _productsUnitOfWork;
         private readonly IOrderUnitOfWork _ordersUnitOfWork;
+        private readonly DataContext _dataContext;
 
         public OrdersHelper(
             IUserUnitOfWork usersUnitOfWork,
             IProductUnitOfWork productsUnitOfWork,
-            IOrderUnitOfWork ordersUnitOfWork)
+            IOrderUnitOfWork ordersUnitOfWork,
+            DataContext dataContext)
         {
             _usersUnitOfWork = usersUnitOfWork;
             _productsUnitOfWork = productsUnitOfWork;
             _ordersUnitOfWork = ordersUnitOfWork;
+            _dataContext= dataContext;
         }
-        public async Task<ActionResponse<bool>> ProcessOrderAsync(string email, List<OrderDetail> orderDetails)
+        public async Task<ActionResponse<bool>> ProcessOrderAsync(string email,int tableId, List<OrderDetail> orderDetails)
         {
             var user = await _usersUnitOfWork.GetUserAsync(email);
             if (user == null)
@@ -40,11 +45,21 @@ namespace Restromanager.Backend.Helpers
                     Message = "No hay detalles en la orden"
                 };
             }
+            var table = await _dataContext.Tables.FirstOrDefaultAsync(t=>t.Id==tableId);
+            if (table == null)
+            {
+                return new ActionResponse<bool>
+                {
+                    WasSuccess = false,
+                    Message = "La mesa no existe"
+                };
+            }
 
             var order = new Order
             {
                 Date = DateTime.UtcNow,
                 User = user,
+                Table= table,
                 OrderDetails = orderDetails,
                 OrderStatus = OrderStatus.New
             };

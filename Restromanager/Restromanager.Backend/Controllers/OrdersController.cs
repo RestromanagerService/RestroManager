@@ -69,8 +69,7 @@ namespace Restrommanager.Backend.Controllers
                 };
                 orderDetails.Add(orderDetail);
             }
-
-            var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!, orderDetails);
+            var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!,orderDTO.TableId, orderDetails);
             if (response.WasSuccess)
             {
                 return NoContent();
