@@ -66,7 +66,7 @@ namespace Restromanager.Backend.Helpers
 
             foreach (var orderDetail in order.OrderDetails)
             {
-                var actionProduct = await _productsUnitOfWork.GetAsync(orderDetail.Product!.Id);
+                var actionProduct = await _productsUnitOfWork.GetAsync(orderDetail.ProductId);
                 if (actionProduct.WasSuccess)
                 {
                     var product = actionProduct.Result;
