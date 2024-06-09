@@ -1,5 +1,7 @@
-﻿using Restromanager.Backend.Domain.Entities;
+﻿using Azure;
+using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.DTOs;
+using Restromanager.Backend.Enums;
 using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.UnitsOfWork.interfaces
@@ -14,5 +16,7 @@ namespace Restromanager.Backend.UnitsOfWork.interfaces
 
         Task<ActionResponse<Order>> GetAsync(int id);
         Task<ActionResponse<Order>> UpdateAsync(Order order);
+
+        Task<ActionResponse<IEnumerable<Order>>> GetByStatusAsync(String status);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.DTOs;
+using Restromanager.Backend.Enums;
 using Restromanager.Backend.Responses;
 
 namespace Restromanager.Backend.Repositories.interfaces
@@ -13,5 +14,7 @@ namespace Restromanager.Backend.Repositories.interfaces
         Task<ActionResponse<IEnumerable<Order>>> GetAsync(string email, PaginationDTO pagination);
 
         Task<ActionResponse<Order>> UpdateAsync(Order order);
+
+        Task<ActionResponse<IEnumerable<Order>>> GetByStatusAsync(String status);
     }
 }
