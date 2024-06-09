@@ -6,5 +6,7 @@
         public int TableId { get; set; }
         public float Quantity { get; set; } = 1;
 
+        public decimal Value { get; set; }
+
     }
 }

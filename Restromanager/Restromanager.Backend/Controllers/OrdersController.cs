@@ -10,7 +10,7 @@ using Restromanager.Backend.UnitsOfWork.interfaces;
 namespace Restrommanager.Backend.Controllers
 {
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {
@@ -35,6 +35,7 @@ namespace Restrommanager.Backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
             var response = await _ordersUnitOfWork.GetAsync(User.Identity!.Name!, pagination);
@@ -46,6 +47,7 @@ namespace Restrommanager.Backend.Controllers
         }
 
         [HttpGet("totalPages")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
         {
             var response = await _ordersUnitOfWork.GetTotalPagesAsync(User.Identity!.Name!, pagination);
@@ -57,6 +59,7 @@ namespace Restrommanager.Backend.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostAsync(OrderDTO orderDTO)
         {
             var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!, orderDTO.TableId);
@@ -79,6 +82,7 @@ namespace Restrommanager.Backend.Controllers
         }
 
         [HttpPatch("{id}/status")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchStatusAsync(int id, [FromBody] OrderDTO orderDTO)
         {
             var response = await _ordersUnitOfWork.GetAsync(id);
@@ -99,6 +103,7 @@ namespace Restrommanager.Backend.Controllers
         }
 
         [HttpGet("status")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetByStatusAsync([FromQuery] String status)
         {
             var response = await _ordersUnitOfWork.GetByStatusAsync(status);

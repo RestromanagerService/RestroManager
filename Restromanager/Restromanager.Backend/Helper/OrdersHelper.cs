@@ -66,7 +66,8 @@ namespace Restromanager.Backend.Helpers
                     Product = productInOrderDetail,
                     ProductId = temporalOrder.ProductId,
                     Quantity = temporalOrder.Quantity,
-                    Order = order
+                    Order = order,
+                    Value = temporalOrder.Value
                 };
 
                 order.OrderDetails.Add(orderDetail);
