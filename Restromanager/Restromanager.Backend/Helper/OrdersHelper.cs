@@ -95,7 +95,11 @@ namespace Restromanager.Backend.Helpers
                 _dataContext.TemporalOrders.Remove(temporalOrder);
             }
             await _dataContext.SaveChangesAsync();
-            return new ActionResponse<bool> { WasSuccess = true };
+            return new ActionResponse<bool>
+            {
+                WasSuccess = true,
+                Message = order.Id.ToString()
+            };
         }
     }
 }

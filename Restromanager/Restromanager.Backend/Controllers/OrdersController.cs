@@ -62,39 +62,10 @@ namespace Restrommanager.Backend.Controllers
             var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!,orderDTO.TableId);
             if (response.WasSuccess)
             {
-                return NoContent();
+                return Ok(response.Message);
             }
             return BadRequest(response.Message);
         }
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutAsync(int id, OrderDTO orderDTO)
-        //{
-        //    var response = await _ordersUnitOfWork.GetAsync(id);
-        //    if (!response.WasSuccess)
-        //    {
-        //        return NotFound(response.Message);
-        //    }
-
-        //    var order = response.Result;
-        //    order.OrderStatus = orderDTO.OrderStatus;
-        //    order.OrderDetails.Clear();
-        //    foreach (var detailDTO in orderDTO.OrderDetails)
-        //    {
-        //        order.OrderDetails.Add(new OrderDetail
-        //        {
-        //            ProductId = detailDTO.ProductId,
-        //            Quantity = detailDTO.Quantity,
-        //        });
-        //    }
-
-        //    var updateResponse = await _ordersUnitOfWork.UpdateAsync(order);
-        //    if (updateResponse.WasSuccess)
-        //    {
-        //        return Ok(updateResponse.Result);
-        //    }
-        //    return BadRequest(updateResponse.Message);
-        //}
 
         [HttpPatch("{id}/status")]
         public async Task<IActionResult> PatchStatusAsync(int id, [FromBody] OrderDTO orderDTO)
@@ -114,6 +85,17 @@ namespace Restrommanager.Backend.Controllers
                 return Ok(updateResponse.Result);
             }
             return BadRequest(updateResponse.Message);
+        }
+
+        [HttpGet("status")]
+        public async Task<IActionResult> GetByStatusAsync([FromQuery] String status)
+        {
+            var response = await _ordersUnitOfWork.GetByStatusAsync(status);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return NotFound(response.Message);
         }
     }
 }

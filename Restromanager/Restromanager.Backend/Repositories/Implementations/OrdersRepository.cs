@@ -104,5 +104,22 @@ namespace Restromanager.Backend.Repositories.Implementations
                     .ToListAsync()
             };
         }
+        public async Task<ActionResponse<IEnumerable<Order>>> GetByStatusAsync(string status)
+        {
+            if (!Enum.TryParse<OrderStatus>(status, true, out var orderStatus))
+            {
+                return new ActionResponse<IEnumerable<Order>> { WasSuccess = false, Message = "Invalid status" };
+            }
+
+            var orders = await _context.Orders
+                .Where(o => o.OrderStatus == orderStatus)
+                .ToListAsync();
+
+            if (orders == null || !orders.Any())
+            {
+                return new ActionResponse<IEnumerable<Order>> { WasSuccess = false, Message = "No orders found with the specified status" };
+            }
+            return new ActionResponse<IEnumerable<Order>> { WasSuccess = true, Result = orders };
+        }
     }
 }
