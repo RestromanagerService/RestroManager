@@ -4,13 +4,7 @@ using Restromanager.Backend.Domain.Entities;
 using Restromanager.Backend.Enums;
 using Restromanager.Backend.Responses;
 using Restromanager.Backend.UnitsOfWork.interfaces;
-
-using Microsoft.EntityFrameworkCore;
-using Restromanager.Backend.Data;
-using Restromanager.Backend.Domain.Entities;
-using Restromanager.Backend.Enums;
-using Restromanager.Backend.Responses;
-using Restromanager.Backend.UnitsOfWork.interfaces;
+using Restromanager.Backend.DTOs;
 
 namespace Restromanager.Backend.Helpers
 {
@@ -34,6 +28,57 @@ namespace Restromanager.Backend.Helpers
             _temporalOrdersUnitOfWork = temporalOrdersUnitOfWork;
             _ordersUnitOfWork = ordersUnitOfWork;
             _dataContext = dataContext;
+        }
+
+        public async Task<ActionResponse<bool>> ProcessOrderAnAsync(IEnumerable<TemporalOrderDTO> temporalOrders, int tableId)
+        {
+            var table = await _dataContext.Tables.FirstOrDefaultAsync(t => t.Id == tableId);
+            if (table == null)
+            {
+                return new ActionResponse<bool>
+                {
+                    WasSuccess = false,
+                    Message = "La mesa no existe"
+                };
+            }
+
+            var order = new Order
+            {
+                Date = DateTime.UtcNow,
+                Table = table,
+                OrderStatus = OrderStatus.New,
+                OrderDetails = new List<OrderDetail>()
+            };
+            if (!temporalOrders.Any())
+            {
+                return new ActionResponse<bool>
+                {
+                    WasSuccess = false,
+                    Message = "No hay productos en la orden"
+                };
+            }
+
+            foreach (var temporalOrder in temporalOrders)
+            {
+                var productInOrderDetail = _productsUnitOfWork.GetAsync(temporalOrder.ProductId).Result.Result;
+                var orderDetail = new OrderDetail
+                {
+                    Product = productInOrderDetail,
+                    ProductId = temporalOrder.ProductId,
+                    Quantity = temporalOrder.Quantity,
+                    Order = order
+                };
+
+                order.OrderDetails.Add(orderDetail);
+            }
+
+            await _ordersUnitOfWork.AddAsync(order);
+
+            return new ActionResponse<bool>
+            {
+                WasSuccess = true,
+                Message = order.Id.ToString()
+            };
         }
         public async Task<ActionResponse<bool>> ProcessOrderAsync(string email, int tableId)
         {
@@ -67,6 +112,15 @@ namespace Restromanager.Backend.Helpers
                 };
             }
             var temporalOrders = actionTemporalOrders.Result as List<TemporalOrder>;
+            if (temporalOrders.Count == 0) 
+            {
+                return new ActionResponse<bool>
+                {
+                    WasSuccess = false,
+                    Message = "No hay orden temporal disponible."
+                };
+            }
+            
             var order = new Order
             {
                 Date = DateTime.UtcNow,

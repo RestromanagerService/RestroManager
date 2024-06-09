@@ -59,7 +59,18 @@ namespace Restrommanager.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(OrderDTO orderDTO)
         {
-            var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!,orderDTO.TableId);
+            var response = await _ordersHelper.ProcessOrderAsync(User.Identity!.Name!, orderDTO.TableId);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Message);
+            }
+            return BadRequest(response.Message);
+        }
+
+        [HttpPost("an")]
+        public async Task<IActionResult> PostAnAsync([FromBody] TemporalOrderFromLocalStorageDTO temporalOrder)
+        {
+            var response = await _ordersHelper.ProcessOrderAnAsync(temporalOrder.temporalOrders, temporalOrder.TableId);
             if (response.WasSuccess)
             {
                 return Ok(response.Message);
