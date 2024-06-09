@@ -14,7 +14,7 @@
       "connectionId": "ConnectionStrings:AzureBDConnection"
     },
     "storage1": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/RestromanagerBackend/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsAzureStorage_638DFCEE02, /subscriptions/40fcf6c8-d7e4-4afd-ba01-582af7bfb1c8/resourcegroups/Construcción-ESP-ITM/providers/Microsoft.Web/sites/RestromanagerBackend/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsAzureStorage_699FD76347",
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/RestromanagerBackend20240608191608/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsAzureStorage_638DFCEE02, /subscriptions/40fcf6c8-d7e4-4afd-ba01-582af7bfb1c8/resourcegroups/Construcción-ESP-ITM/providers/Microsoft.Web/sites/RestromanagerBackend20240608191608/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsAzureStorage_699FD76347",
       "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/orderssebas20241",
       "type": "storage.azure",
@@ -22,7 +22,7 @@
       "dynamicId": null
     },
     "mssql1": {
-      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/RestromanagerBackend/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsLocalConnection_69EE39973E",
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/RestromanagerBackend20240608191608/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsLocalConnection_69EE39973E",
       "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/restromanagerserver/databases/Restromanager.Backend_db",
       "type": "mssql.azure",
