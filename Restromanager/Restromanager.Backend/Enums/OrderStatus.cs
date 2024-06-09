@@ -7,16 +7,13 @@ namespace Restromanager.Backend.Enums
         [Description("Nuevo")]
         New,
 
-        [Description("Despachado")]
-        Dispatched,
+        [Description("Preparado")]
+        Prepared,
 
-        [Description("Enviado")]
-        Sent,
+        [Description("Entregado")]
+        Delivered,
 
-        [Description("Confirmado")]
-        Confirmed,
-
-        [Description("Cancelado")]
-        Cancelled
+        [Description("Pagado")]
+        Payed
     }
 }
